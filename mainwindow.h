@@ -3,7 +3,8 @@
 
 #include <QMainWindow>
 #include<QSerialPort>
-
+#include<windows.h>
+#include<dbt.h>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -16,6 +17,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     QSerialPort *serialPort;
+    /*-------------函数接口-------------------*/
+    void InitDetection(void);
+    void WindownInit(void);
 private slots:
     void on_openserialBt_clicked();
 
