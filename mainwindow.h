@@ -1,6 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+#include <vserialcom.h>
 #include <QMainWindow>
 #include<QSerialPort>
 #include<windows.h>
@@ -17,9 +17,20 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     QSerialPort *serialPort;
+
+//     vSerialCom    vSerialCtr;
+
     /*-------------函数接口-------------------*/
     void InitDetection(void);
     void WindownInit(void);
+    void SerialOpen(void);
+    void SerialClose(void);
+public slots:
+
+signals:
+    void vOpenSerial(bool & isOpen);
+    void vCloseSerial(void);
+
 private slots:
     void on_openserialBt_clicked();
 

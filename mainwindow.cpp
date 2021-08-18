@@ -32,8 +32,10 @@ void MainWindow::on_openserialBt_clicked()
 
 void MainWindow::InitDetection(void)
 {
+    WindownInit();
+//    connect(ui->openserialBt, &QPushButton::released, this, &MainWindow::SerialOpen;
 
-
+//    connect(this, &MainWindow::vOpenSerial, &this->v)
 }
 void MainWindow::WindownInit(void)
 {

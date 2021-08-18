@@ -17,11 +17,31 @@ DEFINES += QT_DEPRECATED_WARNINGS \
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    device/Protocol/CRC_Protocol/bsp_crc16.cpp \
+    device/Protocol/CRC_Protocol/bsp_crc8.cpp \
+    device/Protocol/bsp_protocol.cpp \
+    device/vcodeconverter.cpp \
+    device/vplaintextedit.cpp \
+    device/vqserialrxthread.cpp \
+    device/vqserialtxthread.cpp \
+    device/vseaskyport.cpp \
+    device/vserialport.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    vserialcom.cpp
 
 HEADERS += \
-    mainwindow.h
+    device/Protocol/CRC_Protocol/bsp_crc16.h \
+    device/Protocol/CRC_Protocol/bsp_crc8.h \
+    device/Protocol/bsp_protocol.h \
+    device/vcodeconverter.h \
+    device/vplaintextedit.h \
+    device/vqserialrxthread.h \
+    device/vqserialtxthread.h \
+    device/vseaskyport.h \
+    device/vserialport.h \
+    mainwindow.h \
+    vserialcom.h
 
 FORMS += \
     mainwindow.ui
