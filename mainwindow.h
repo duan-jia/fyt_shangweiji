@@ -5,6 +5,7 @@
 #include<QSerialPort>
 #include<windows.h>
 #include<dbt.h>
+#include<QMessageBox>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -18,23 +19,34 @@ public:
     ~MainWindow();
     QSerialPort *serialPort;
 
-//     vSerialCom    vSerialCtr;
+    vSerialCom    vSerialCtr;
 
     /*-------------函数接口-------------------*/
     void InitDetection(void);
     void WindownInit(void);
-    void SerialOpen(void);
-    void SerialClose(void);
-public slots:
+    /*-------------------------------------------*/
+    void readSerialChange(void);//读取选中串口
+    void SerialOpen(void);      //打开串口
+    void SerialClose(void);     //关闭串口
 
+public slots:
+//    void vRxSlotChanged(void);        //刷新接收槽函数连接
+//    void vTxSlotChanged(void);        //刷新发送槽函数连接
 signals:
     void vOpenSerial(bool & isOpen);
     void vCloseSerial(void);
-
+    void vTxError(void);
 private slots:
     void on_openserialBt_clicked();
 
 private:
     Ui::MainWindow *ui;
+
+protected:
+//    void closeEvent(QCloseEvent *event);
+    void doCritical(const QString &str);
+    void doWarning(const QString &str);
+    void doHelp(void);
+    void doAbout(void);
 };
 #endif // MAINWINDOW_H

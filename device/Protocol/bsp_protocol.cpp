@@ -2,9 +2,9 @@
 	@SEASKY---2020/09/05
 	湖南大学RoBoMatster串口通信协议
 */
-#include "vSeaskyPort/Protocol/bsp_protocol.h"
-#include "vSeaskyPort/Protocol/CRC_Protocol/bsp_crc8.h"
-#include "vSeaskyPort/Protocol/CRC_Protocol/bsp_crc16.h"
+#include "device/Protocol/bsp_protocol.h"
+#include "device/Protocol/CRC_Protocol/bsp_crc8.h"
+#include "device/Protocol/CRC_Protocol/bsp_crc16.h"
 /*获取CRC8校验码*/
 uint8_t Get_CRC8_Check(uint8_t *pchMessage,uint16_t dwLength)
 {

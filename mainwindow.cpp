@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
         serialNamePort<<info.portName();
     }
     ui->serialCb->addItems(serialNamePort);
+
+    InitDetection();
 }
 
 MainWindow::~MainWindow()
@@ -29,13 +31,18 @@ void MainWindow::on_openserialBt_clicked()
 {
 
 }
-
 void MainWindow::InitDetection(void)
 {
     WindownInit();
-//    connect(ui->openserialBt, &QPushButton::released, this, &MainWindow::SerialOpen;
+    connect(ui->openserialBt, &QPushButton::released, this, &MainWindow::SerialOpen);
 
-//    connect(this, &MainWindow::vOpenSerial, &this->v)
+    connect(this, &MainWindow::vOpenSerial, &this->vSerialCtr.vSerial,
+            &vSerialPort::vSerialOpen, Qt::BlockingQueuedConnection);
+    connect(this, &MainWindow::vCloseSerial, &this->vSerialCtr.vSerial,
+            &vSerialPort::vSerialClose, Qt::QueuedConnection);
+
+    connect(&this->vSerialCtr.vSerial,&vSerialPort::vTxError,
+            this,&MainWindow::vTxError);
 }
 void MainWindow::WindownInit(void)
 {
@@ -60,4 +67,69 @@ void MainWindow::WindownInit(void)
             GetLastError();
         }
     }
+}
+
+//读取串口配置
+void MainWindow::readSerialChange(void)
+{
+    this->vSerialCtr.vSerial.vSerialConfig->vSerialPortName = ui->serialCb->currentData().toInt();
+    this->vSerialCtr.vSerial.vSerialConfig->vSerialBaudRate = ui->baudrateCb->currentData().toInt();
+    this->vSerialCtr.vSerial.vSerialConfig->vSerialDataBits = QSerialPort::DataBits(ui->dataCb->currentData().toInt());
+    this->vSerialCtr.vSerial.vSerialConfig->vSerialStopBits = QSerialPort::StopBits(ui->stopCb->currentData().toInt());
+    this->vSerialCtr.vSerial.vSerialConfig->vSerialParrity  = QSerialPort::Parity(ui->checkoutCb->currentData().toInt());
+}
+//打开串口设备
+void MainWindow::SerialOpen(void)
+{
+    if(ui->openserialBt->isEnabled() == 1)
+    {
+        //读取选择的串口配置
+        readSerialChange();
+        bool isOpen;
+        emit vOpenSerial(isOpen);
+        if(isOpen)
+        {
+            ui->openserialBt->setChecked(true);
+        }
+        else
+        {
+            //打开串口失败
+            this->doWarning(QString::fromLocal8Bit("打开串口失败，请检查串口是否插入！"));
+            this->SerialClose();
+        }
+    }
+    else if(ui->openserialBt->isEnabled() == 0)
+    {
+        this->SerialClose();
+    }
+}
+//关闭串口设备
+void MainWindow::SerialClose(void)
+{
+    ui->openserialBt->setChecked(false);
+    emit vCloseSerial();
+}
+
+/*---------------------------提示窗口-------------------------------*/
+/*错误*/
+void MainWindow::doCritical(const QString &str)
+{
+    QMessageBox::critical(NULL,QString::fromLocal8Bit("错误"),str);
+}
+/*警告*/
+void MainWindow::doWarning(const QString &str)
+{
+    QMessageBox::warning(this,QString::fromLocal8Bit("警告"),str);
+}
+/*帮助*/
+void MainWindow::doHelp(void)
+{
+    QMessageBox::information(this,QString::fromLocal8Bit("帮助"),"");
+}
+/*关于*/
+void MainWindow::doAbout(void)
+{
+    QMessageBox::about(this,QString::fromLocal8Bit("关于"),
+                            QString::fromLocal8Bit("作者：fyt_duan\n"
+                                                   "参考：SEASKY-刘威\n"));
 }

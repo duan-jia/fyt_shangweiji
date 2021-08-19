@@ -1,4 +1,4 @@
-#include "vSeaskyPort/Protocol/CRC_Protocol/bsp_crc8.h"
+#include "device/Protocol/CRC_Protocol/bsp_crc8.h"
 
 /*
  * static uint8_t sht75_crc_table[];
