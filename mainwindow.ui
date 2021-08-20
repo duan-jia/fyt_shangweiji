@@ -24,7 +24,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="TxBt">
+   <widget class="QPushButton" name="txBt">
     <property name="geometry">
      <rect>
       <x>620</x>
@@ -105,18 +105,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QComboBox" name="baudrateCb">
-           <item>
-            <property name="text">
-             <string>115200</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>9600</string>
-            </property>
-           </item>
-          </widget>
+          <widget class="QComboBox" name="baudrateCb"/>
          </item>
          <item>
           <widget class="QLabel" name="label_2">
@@ -130,18 +119,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QComboBox" name="dataCb">
-           <item>
-            <property name="text">
-             <string>8</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>7</string>
-            </property>
-           </item>
-          </widget>
+          <widget class="QComboBox" name="dataCb"/>
          </item>
          <item>
           <widget class="QLabel" name="label_3">
@@ -155,23 +133,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QComboBox" name="checkoutCb">
-           <item>
-            <property name="text">
-             <string>无</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>奇校验</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>偶校验</string>
-            </property>
-           </item>
-          </widget>
+          <widget class="QComboBox" name="checkoutCb"/>
          </item>
          <item>
           <widget class="QLabel" name="label_4">
@@ -185,18 +147,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <widget class="QComboBox" name="stopCb">
-           <item>
-            <property name="text">
-             <string>1</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2</string>
-            </property>
-           </item>
-          </widget>
+          <widget class="QComboBox" name="stopCb"/>
          </item>
          <item>
           <widget class="QLabel" name="label_5">
@@ -229,6 +180,42 @@
     </property>
     <property name="text">
      <string>关闭串口</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="timeTxBt">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>350</y>
+      <width>91</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>定时发送</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>350</y>
+      <width>42</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>350</y>
+      <width>72</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ms</string>
     </property>
    </widget>
   </widget>

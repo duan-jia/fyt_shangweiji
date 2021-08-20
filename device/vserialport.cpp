@@ -1,4 +1,4 @@
-﻿#include "vserialport.h"
+﻿ #include "vserialport.h"
 
 /*
  *
@@ -65,8 +65,8 @@ void vSerialPort::vSerialOpen(bool & isOpen)
     this->qSerial->setDataBits(this->vSerialConfig->vSerialDataBits);
     //设置奇偶校验
     this->qSerial->setParity(this->vSerialConfig->vSerialParrity);
-//    //设置数据流控
-//    this->qSerial->setFlowControl(this->vSerialConfig->vSerialFlowControl);
+    //设置数据流控
+    this->qSerial->setFlowControl(this->vSerialConfig->vSerialFlowControl);
     //打开串口设备
     isOpen =  (this->qSerial->open(QIODevice::ReadWrite));
 }
