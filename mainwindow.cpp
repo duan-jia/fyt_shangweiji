@@ -6,6 +6,8 @@
 #include <locale>
 #include <QMessageBox>
 #include <QSpinBox>
+#include <QSettings>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -25,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
     UpdateComInfo();
     //4.初始化串口设备更新支持
     UpdateSerial();
+    //5.加载信息发送配置
+    InitSerialTx();
 }
 
 MainWindow::~MainWindow()
@@ -220,25 +224,26 @@ void MainWindow::readSerialChange(void)
 //打开串口设备
 void MainWindow::SerialOpen(void)
 {
-    if(ui->openserialBt->isEnabled() == 1)
+    if(ui->openserialBt->isChecked())
     {
         //读取选择的串口配置
         readSerialChange();
-        bool isOpen;
+        bool isOpen = 0;
         emit vOpenSerial(isOpen);
         if(isOpen)
         {
             ui->openserialBt->setChecked(true);
+            ui->openserialBt->setText("关闭串口");
+            qDebug("z");
         }
         else
         {
             //打开串口失败
-//            this->doWarning(QString::fromUtf8("打开串口失败，请检查串口是否插入！"));
-//            this->SerialClose();
-            qDebug("fuck");
+            this->doWarning(QString::fromUtf8("打开串口失败，请检查串口是否插入！"));
+            this->SerialClose();
         }
     }
-    else if(ui->openserialBt->isEnabled() == 0)
+    else
     {
         this->SerialClose();
     }
@@ -247,9 +252,45 @@ void MainWindow::SerialOpen(void)
 void MainWindow::SerialClose(void)
 {
     ui->openserialBt->setChecked(false);
+    ui->openserialBt->setText("打开串口");
     emit vCloseSerial();
 }
+//启动时读取设置
+const QString ModulePath = "/Config/ModulePath";
+const QString CfgPath    = "/Config";
+void MainWindow::ReadSettings(void)
+{
+    //获取配置路径
+    QString path = qApp->applicationDirPath()+
+            CfgPath+"/"+"config.ini";
+    QSettings settings(path, QSettings::IniFormat);
+    settings.beginGroup("Configuration");
+//    //恢复上次的界面位置和大小
+//    resize(settings.value("size",QSize(400,400)).toSize());
+//    move(settings.value("pos",QPoint(200,200)).toPoint());
+    //串口配置
+    ui->serialCb->setCurrentIndex(settings.value("PortName",QVariant(7)).toInt());
+    ui->baudrateCb->setCurrentIndex(settings.value("BaudRate",QVariant(0)).toInt());
+    ui->stopCb->setCurrentIndex(settings.value("StopBits",QVariant(0)).toInt());
+    ui->dataCb->setCurrentIndex(settings.value("DataBits",QVariant(0)).toInt());
+//    ui->comboBoxCom6->setCurrentIndex(settings.value("Parrity",QVariant(0)).toInt());
+    //    ui->comboBoxCom7->setCurrentIndex(settings.value("FlowControl",QVariant(0)).toInt());
+    //    ui->checkBoxRx1->setChecked(settings.value("rxHexEnable",false).toBool());
+    //    ui->checkBoxRx2->setChecked(settings.value("vRxTimerStamp",false).toBool());
+        //发送窗口的数据
+    //    ui->plainTextTx->TextTxBuff=settings.value("TxPlainText","").toByteArray();
+        //多条发送窗口
+//    for(qint16 i=0;i<SerialMutipSendNum;i++)
+//    {
+//        LineEditData[i] = settings.value(QString("vLineText%1").arg(i+1),"").toByteArray();
+//    }
+//    ui->checkBox_1->setChecked(settings.value("vTxMultiple",false).toBool());
+//    ui->checkBox_2->setChecked(settings.value("vTxHexEn",false).toBool());
+//    ui->checkBox_3->setChecked(settings.value("vTxStamp",false).toBool());
+    ui->spinBox->setValue(settings.value("TxTimerCnt",1).toInt());
+//    ui->spinBox_2->setValue(settings.value("TxSeaskyTimerCnt",1).toInt());
 
+}
 
 /******一些临时加的*/
 //发送的定时器控制

@@ -165,22 +165,12 @@
        <property name="text">
         <string>打开串口</string>
        </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
     </layout>
-   </widget>
-   <widget class="QPushButton" name="closeserialBt">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>280</y>
-      <width>151</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>关闭串口</string>
-    </property>
    </widget>
    <widget class="QCheckBox" name="timeTxBt">
     <property name="geometry">
@@ -198,7 +188,7 @@
    <widget class="QSpinBox" name="spinBox">
     <property name="geometry">
      <rect>
-      <x>480</x>
+      <x>490</x>
       <y>350</y>
       <width>42</width>
       <height>22</height>

@@ -34,7 +34,9 @@ public:
     void readSerialChange(void);//读取选中串口
     void SerialOpen(void);      //打开串口
     void SerialClose(void);     //关闭串口
-
+    /*--------------界面配置恢复相关----------------*/
+    void ReadSettings(void);       //启动时读取设置
+//    void vWriteSettings(void);      //关闭时保存设置
 public slots:
 //    void vRxSlotChanged(void);        //刷新接收槽函数连接
 //    void vTxSlotChanged(void);        //刷新发送槽函数连接

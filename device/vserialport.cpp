@@ -78,6 +78,8 @@ void vSerialPort::vSerialClose(void)
         this->qSerial->close();
     }
 }
+
+
 ///*同一时间只允许一个线程调用*/
 void vSerialPort::vWriteData(const QByteArray &str)
 {
