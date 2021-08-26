@@ -21,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent)
         serialNamePort<<info.portName();
     }
     ui->serialCb->addItems(serialNamePort);
+    //0.初始化相关的地址
+    DependenceAddr();
 
     InitDetection();
 
@@ -74,30 +76,55 @@ void MainWindow::WindownInit(void)
         }
     }
 }
+//0. 配置相关地址，应包含所有地址初始化操作
+const qint32  SeaskyPortNum      = 24; //最大支持的FLOAT数据长度
+bool    rxSeaskyHexEnable = false;       //16进制格式接收使能
+const qint32  Utf8MaxLen         = 10+SeaskyPortNum*4;
+float   vRxfloat[SeaskyPortNum];
+uint8_t vRxUtf8[Utf8MaxLen];
+float   vTxfloat[SeaskyPortNum];
+uint8_t vTxUtf8[Utf8MaxLen];
+void MainWindow::DependenceAddr(void)
+{
+    /*Seaky 协议使用相关数据*/
+    //设置依赖的两个Widget 16进制显示窗口
+//    this->vSerialCtr.vSeaskyPortCtr.setQWidgetAddr(
+//                ui->scrollAreaWidgetContents_2,
+//                ui->scrollAreaWidgetContents_3);
+//    this->vSerialCtr.vSeaskyPortCtr.setRxSeaskyAddr(
+//                &vRxQString[0],&vRxName[0],&vRxUnit[0],&vRxfloat[0]);
+//    this->vSerialCtr.vSeaskyPortCtr.setTxSeaskyAddr(
+//                &vTxQString[0],&vTxName[0],&vTxUnit[0],&vTxfloat[0]);
+    /*波形显示控件波形名称查询地址*/
+//    ui->widgetScope->vSetNameAddr(&vRxName[0]);
+    /*协议操作地址受此分配*/
+    this->vSerialCtr.vSeaskyPortCtr.vProtocol.rx_info.utf8_data = &vRxUtf8[0];
+    this->vSerialCtr.vSeaskyPortCtr.vProtocol.rx_info.data =     &vRxfloat[0];
+    this->vSerialCtr.vSeaskyPortCtr.vProtocol.tx_info.utf8_data = &vTxUtf8[0];
+    this->vSerialCtr.vSeaskyPortCtr.vProtocol.tx_info.data =     &vTxfloat[0];
+    /*显示数据地址*/
+    ui->plainTextRx->SetShowBuffAddr(&this->vSerialCtr.vSerial.vSerialData->RxBuff);
+    //串口发送，hex格式共享，所有控件建议只读
+    ui->plainTextTx->setHexEnableAddr(
+                &this->vSerialCtr.vSerial.vSerialData->txHexEnable);
+    //串口接收，hex格式共享，所有控件建议只读
+    ui->plainTextRx->setHexEnableAddr(
+                &this->vSerialCtr.vSerial.vSerialData->rxHexEnable);
+    ui->plainTextRx->setHexEnableAddr(&rxSeaskyHexEnable);
+    //设置发送相关地址
+    this->vSerialCtr.vQObjectTxCtr.vTxAddrSet(&ui->plainTextTx->TextTxBuff);
+
+}
 //3.串口设置内容初始化，波特率等
 void MainWindow::UpdateComInfo(void)
 {
     /*comboBoxCom1相关字符需要从设备读取*/
 
     /*comboBox配置波特率*/
-    ui->baudrateCb->addItem("2000000",int(2000000));
-    ui->baudrateCb->addItem("1382400",int(1382400));
-    ui->baudrateCb->addItem("921600",int(921600));
-    ui->baudrateCb->addItem("460800",int(460800));
-    ui->baudrateCb->addItem("256000",int(256000));
-    ui->baudrateCb->addItem("230400",int(230400));
-    ui->baudrateCb->addItem("128000",int(128000));
     ui->baudrateCb->addItem("115200",int(115200));
-    ui->baudrateCb->addItem("76800",int(76800));
-    ui->baudrateCb->addItem("57600",int(57600));
-    ui->baudrateCb->addItem("43000",int(43000));
-    ui->baudrateCb->addItem("38400",int(38400));
-    ui->baudrateCb->addItem("19200",int(19200));
-    ui->baudrateCb->addItem("14400",int(14400));
     ui->baudrateCb->addItem("9600",int(9600));
     ui->baudrateCb->addItem("4800",int(4800));
     ui->baudrateCb->addItem("2400",int(2400));
-    ui->baudrateCb->addItem("1200",int(1200));
     //默认选择115200
     ui->baudrateCb->setCurrentText("115200");
 
@@ -234,7 +261,6 @@ void MainWindow::SerialOpen(void)
         {
             ui->openserialBt->setChecked(true);
             ui->openserialBt->setText("关闭串口");
-            qDebug("z");
         }
         else
         {

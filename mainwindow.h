@@ -6,6 +6,8 @@
 #include<windows.h>
 #include<dbt.h>
 #include<QMessageBox>
+
+#include<device/vqlineedithex.h>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -23,6 +25,7 @@ public:
     bool          rxModeCfg = false;//是否使能协议
     bool          txModeCfg = false;//是否使能协议
     /*-------------函数接口-------------------*/
+    void DependenceAddr(void); //0.初始化相关的地址
     void InitDetection(void);//2.串口检测相关的初始化,检测串口设备
     void UpdateComInfo(void);//3.串口设置内容初始化，波特率等
     void UpdateSerial(void);   //4.初始化串口设备更新支持
@@ -36,11 +39,8 @@ public:
     void SerialClose(void);     //关闭串口
     /*--------------界面配置恢复相关----------------*/
     void ReadSettings(void);       //启动时读取设置
-//    void vWriteSettings(void);      //关闭时保存设置
 public slots:
-//    void vRxSlotChanged(void);        //刷新接收槽函数连接
-//    void vTxSlotChanged(void);        //刷新发送槽函数连接
-      void vTxModeTimerCfg(void);       //发送的定时器控制
+    void vTxModeTimerCfg(void);       //发送的定时器控制
 signals:
     void vOpenSerial(bool & isOpen);
     void vCloseSerial(void);
@@ -51,7 +51,6 @@ private:
     Ui::MainWindow *ui;
 
 protected:
-//    void closeEvent(QCloseEvent *event);
     void doCritical(const QString &str);
     void doWarning(const QString &str);
     void doHelp(void);

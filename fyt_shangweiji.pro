@@ -22,8 +22,10 @@ SOURCES += \
     device/Protocol/bsp_protocol.cpp \
     device/vcodeconverter.cpp \
     device/vplaintextedit.cpp \
+    device/vqlineedithex.cpp \
     device/vqserialrxthread.cpp \
     device/vqserialtxthread.cpp \
+    device/vqtextedit.cpp \
     device/vseaskyport.cpp \
     device/vserialport.cpp \
     main.cpp \
@@ -36,8 +38,10 @@ HEADERS += \
     device/Protocol/bsp_protocol.h \
     device/vcodeconverter.h \
     device/vplaintextedit.h \
+    device/vqlineedithex.h \
     device/vqserialrxthread.h \
     device/vqserialtxthread.h \
+    device/vqtextedit.h \
     device/vseaskyport.h \
     device/vserialport.h \
     mainwindow.h \

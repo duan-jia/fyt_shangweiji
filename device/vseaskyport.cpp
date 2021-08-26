@@ -393,14 +393,14 @@ void vSeaskyPort::vHeadCheck(void)
         }
     }
 }
-//void vSeaskyPort::setPlainEdit(vPlainTextEdit * edit)
-//{
-//    static bool hexEnable = false;
-//    this->vPlainEdit = edit;
-//    this->vPlainEdit->SetShowBuffAddr(&this->vRxShow);
-//    this->vPlainEdit->hexEnable = &hexEnable;
-//    this->vPlainEdit->TimerStart();
-//};
+void vSeaskyPort::setPlainEdit(vPlainTextEdit * edit)
+{
+    static bool hexEnable = false;
+    this->vPlainEdit = edit;
+    this->vPlainEdit->SetShowBuffAddr(&this->vRxShow);
+    this->vPlainEdit->hexEnable = &hexEnable;
+    this->vPlainEdit->TimerStart();
+};
 void vSeaskyPort::vUpdateShowBuff(const QString &currentTimer)
 {
     this->vRxShow.append(currentTimer);
