@@ -7,7 +7,7 @@
 #include <device/vserialport.h>
 
 #include <QDebug>
-
+#include<QMessageBox>
 typedef enum
 {
    SerialOrd=0,//普通发送模式

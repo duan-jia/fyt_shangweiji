@@ -2,9 +2,9 @@
 #define VSERIALCOM_H
 
 #include <QObject>
-#include <device/vqserialrxthread.h>
-#include <device/vqserialtxthread.h>
-#include <device/vseaskyport.h>
+#include <vqserialrxthread.h>
+#include <vqserialtxthread.h>
+#include <vseaskyport.h>
 //创建串口应用
 class vSerialCom : public QObject
 {

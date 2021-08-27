@@ -17,15 +17,16 @@ DEFINES += QT_DEPRECATED_WARNINGS \
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    control_class/vCombox.cpp \
+    control_class/vplaintextedit.cpp \
+    control_class/vqlineedithex.cpp \
+    control_class/vqtextedit.cpp \
     device/Protocol/CRC_Protocol/bsp_crc16.cpp \
     device/Protocol/CRC_Protocol/bsp_crc8.cpp \
     device/Protocol/bsp_protocol.cpp \
     device/vcodeconverter.cpp \
-    device/vplaintextedit.cpp \
-    device/vqlineedithex.cpp \
     device/vqserialrxthread.cpp \
     device/vqserialtxthread.cpp \
-    device/vqtextedit.cpp \
     device/vseaskyport.cpp \
     device/vserialport.cpp \
     main.cpp \
@@ -33,15 +34,16 @@ SOURCES += \
     vserialcom.cpp
 
 HEADERS += \
+    control_class/vCombox.h \
+    control_class/vplaintextedit.h \
+    control_class/vqlineedithex.h \
+    control_class/vqtextedit.h \
     device/Protocol/CRC_Protocol/bsp_crc16.h \
     device/Protocol/CRC_Protocol/bsp_crc8.h \
     device/Protocol/bsp_protocol.h \
     device/vcodeconverter.h \
-    device/vplaintextedit.h \
-    device/vqlineedithex.h \
     device/vqserialrxthread.h \
     device/vqserialtxthread.h \
-    device/vqtextedit.h \
     device/vseaskyport.h \
     device/vserialport.h \
     mainwindow.h \
@@ -49,6 +51,9 @@ HEADERS += \
 
 FORMS += \
     mainwindow.ui
+
+INCLUDEPATH += ./device\
+                ./control_class
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -76,7 +76,6 @@ void vQObjectTx::vTxTimeOut(void)
                         }
                         else
                         {
-
                             emit vTxMessage(CodeCoding((*lineEditTx)+LineFeed));
                         }
                     }

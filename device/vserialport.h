@@ -9,7 +9,7 @@
  */
 #include <QSerialPort>
 #include <QSerialPortInfo>
-#include <device/vcodeconverter.h>
+#include <vcodeconverter.h>
 #include <QThread>
 
 #include <QDebug>

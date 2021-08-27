@@ -31,6 +31,8 @@ MainWindow::MainWindow(QWidget *parent)
     UpdateSerial();
     //5.加载信息发送配置
     InitSerialTx();
+
+    ReadSettings();
 }
 
 MainWindow::~MainWindow()
@@ -102,7 +104,6 @@ void MainWindow::DependenceAddr(void)
     ui->plainTextRx->setHexEnableAddr(&rxSeaskyHexEnable);
     //设置发送相关地址
     this->vSerialCtr.vQObjectTxCtr.vTxAddrSet(&ui->plainTextTx->TextTxBuff);
-
 }
 //3.串口设置内容初始化，波特率等
 void MainWindow::UpdateComInfo(void)
@@ -200,12 +201,27 @@ void MainWindow::InitSerialTx(void)
         //更新vQObjectTxCtr的发送定时器时间
         vTxModeTimerCfg();
     });
+    //发送hex模式切换
+    connect(this,
+            &MainWindow::txHexEnableChanged,
+            ui->plainTextTx,
+            &vQTextEdit::hexEnableChanged);
+    //发送窗口hex格式改变
+    connect(ui->hexCb,&QCheckBox::released,
+            this,&MainWindow::vTxHexEnableCfg);
     // 定时器发送启动控制
     connect(ui->txBt,
             &QPushButton::released,
             &this->vSerialCtr.vQObjectTxCtr,
             &vQObjectTx::vTxTimeOut
             ,Qt::QueuedConnection);
+    //根据选择内容清空对应发送数据
+    connect(ui->txClearBt,&QPushButton::released,[=]()
+    {
+        ui->plainTextTx->TextTxBuff.clear();
+        //更新显示
+        emit txHexEnableChanged();
+    });
 }
 //6.加载信息接收配置
 void MainWindow::InitSerialRx(void)
@@ -270,6 +286,7 @@ void MainWindow::SerialClose(void)
     ui->openserialBt->setText("打开串口");
     emit vCloseSerial();
 }
+/*---------------------------界面恢复保存函数-------------------------------*/
 //启动时读取设置
 const QString ModulePath = "/Config/ModulePath";
 const QString CfgPath    = "/Config";
@@ -280,33 +297,47 @@ void MainWindow::ReadSettings(void)
             CfgPath+"/"+"config.ini";
     QSettings settings(path, QSettings::IniFormat);
     settings.beginGroup("Configuration");
-//    //恢复上次的界面位置和大小
-//    resize(settings.value("size",QSize(400,400)).toSize());
-//    move(settings.value("pos",QPoint(200,200)).toPoint());
     //串口配置
     ui->serialCb->setCurrentIndex(settings.value("PortName",QVariant(7)).toInt());
     ui->baudrateCb->setCurrentIndex(settings.value("BaudRate",QVariant(0)).toInt());
     ui->stopCb->setCurrentIndex(settings.value("StopBits",QVariant(0)).toInt());
     ui->dataCb->setCurrentIndex(settings.value("DataBits",QVariant(0)).toInt());
-//    ui->comboBoxCom6->setCurrentIndex(settings.value("Parrity",QVariant(0)).toInt());
-    //    ui->comboBoxCom7->setCurrentIndex(settings.value("FlowControl",QVariant(0)).toInt());
-    //    ui->checkBoxRx1->setChecked(settings.value("rxHexEnable",false).toBool());
-    //    ui->checkBoxRx2->setChecked(settings.value("vRxTimerStamp",false).toBool());
-        //发送窗口的数据
-    //    ui->plainTextTx->TextTxBuff=settings.value("TxPlainText","").toByteArray();
-        //多条发送窗口
-//    for(qint16 i=0;i<SerialMutipSendNum;i++)
-//    {
-//        LineEditData[i] = settings.value(QString("vLineText%1").arg(i+1),"").toByteArray();
-//    }
-//    ui->checkBox_1->setChecked(settings.value("vTxMultiple",false).toBool());
-//    ui->checkBox_2->setChecked(settings.value("vTxHexEn",false).toBool());
-//    ui->checkBox_3->setChecked(settings.value("vTxStamp",false).toBool());
+    ui->checkoutCb->setCurrentIndex(settings.value("Checkout",QVariant(0)).toInt());
+    //发送窗口的数据
     ui->spinBox->setValue(settings.value("TxTimerCnt",1).toInt());
-//    ui->spinBox_2->setValue(settings.value("TxSeaskyTimerCnt",1).toInt());
-
+    ui->hexCb->setChecked(settings.value("hexCb",false).toBool());
+    ui->timeTxBt->setChecked(settings.value("timeTxBt",false).toBool());
+    ui->plainTextTx->TextTxBuff=settings.value("TxPlainText","").toByteArray();
 }
+//关闭时保存设置
+void MainWindow::WriteSettings(void)
+{
+    QString path = qApp->applicationDirPath()+
+            CfgPath+"/"+"config.ini";
+    QSettings settings(path, QSettings::IniFormat);
+    settings.beginGroup("Configuration");
+    settings.setValue("size",size());
+    settings.setValue("pos",pos());
+    //串口配置
+    settings.setValue("PortName",ui->serialCb->currentIndex());
+    settings.setValue("BaudRate",ui->baudrateCb->currentIndex());
+    settings.setValue("StopBits",ui->stopCb->currentIndex());
+    settings.setValue("DataBits",ui->dataCb->currentIndex());
+    settings.setValue("Checkout",ui->checkoutCb->currentIndex());
+    //发送窗口的数据
+    settings.setValue("TxPlainText",ui->plainTextTx->TextTxBuff);
+    settings.setValue("timeTxBt",ui->timeTxBt->isChecked());
+    settings.setValue("hexCb", ui->hexCb->isChecked());
+    settings.setValue("TxTimerCnt",ui->spinBox->value());
 
+    settings.endGroup();
+}
+//退出事件->读取存储配置
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    WriteSettings();
+    event->accept();
+}
 /******一些临时加的*/
 //发送的定时器控制
 void MainWindow::vTxModeTimerCfg(void)
@@ -324,6 +355,20 @@ void MainWindow::vTxModeTimerCfg(void)
             this->vSerialCtr.vQObjectTxCtr.vTimerStop();
         }
     }
+}
+/*---------------------------刷新槽函数-------------------------------*/
+//刷新TxHexEnable
+void MainWindow::vTxHexEnableCfg(void)
+{
+    if(ui->hexCb->isChecked())
+    {
+        this->vSerialCtr.vSerial.vSerialData->txHexEnable = true;
+    }
+    else
+    {
+        this->vSerialCtr.vSerial.vSerialData->txHexEnable = false;
+    }
+    emit txHexEnableChanged();
 }
 /*---------------------------提示窗口-------------------------------*/
 /*错误*/

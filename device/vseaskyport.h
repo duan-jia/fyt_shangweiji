@@ -7,10 +7,10 @@
 #include <QLineEdit>
 #include <QThread>
 #include <QTimer>
-#include <device/Protocol/bsp_protocol.h>
-#include <device/vplaintextedit.h>
+#include <Protocol/bsp_protocol.h>
+#include <vplaintextedit.h>
 #include <QSerialPort>
-#include <device/vserialport.h>
+#include <vserialport.h>
 
 #include <QDebug>
 typedef struct
