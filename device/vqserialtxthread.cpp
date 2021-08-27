@@ -47,7 +47,6 @@ void vQObjectTx::vTxTimeOut(void)
 {
     if(this->vSerial!=NULL)
     {
-        qDebug("fuck");
         switch(this->vSerialTxMode)
         {
             case SerialOrd:

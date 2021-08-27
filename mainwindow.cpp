@@ -86,17 +86,6 @@ float   vTxfloat[SeaskyPortNum];
 uint8_t vTxUtf8[Utf8MaxLen];
 void MainWindow::DependenceAddr(void)
 {
-    /*Seaky 协议使用相关数据*/
-    //设置依赖的两个Widget 16进制显示窗口
-//    this->vSerialCtr.vSeaskyPortCtr.setQWidgetAddr(
-//                ui->scrollAreaWidgetContents_2,
-//                ui->scrollAreaWidgetContents_3);
-//    this->vSerialCtr.vSeaskyPortCtr.setRxSeaskyAddr(
-//                &vRxQString[0],&vRxName[0],&vRxUnit[0],&vRxfloat[0]);
-//    this->vSerialCtr.vSeaskyPortCtr.setTxSeaskyAddr(
-//                &vTxQString[0],&vTxName[0],&vTxUnit[0],&vTxfloat[0]);
-    /*波形显示控件波形名称查询地址*/
-//    ui->widgetScope->vSetNameAddr(&vRxName[0]);
     /*协议操作地址受此分配*/
     this->vSerialCtr.vSeaskyPortCtr.vProtocol.rx_info.utf8_data = &vRxUtf8[0];
     this->vSerialCtr.vSeaskyPortCtr.vProtocol.rx_info.data =     &vRxfloat[0];
