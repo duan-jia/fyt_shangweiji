@@ -47,45 +47,17 @@ void vQObjectTx::vTxTimeOut(void)
 {
     if(this->vSerial!=NULL)
     {
-        switch(this->vSerialTxMode)
+        if((*this->textEditTx)!="")
         {
-            case SerialOrd:
+            //16进制发送不进行编码处理
+            if(this->vSerial->vSerialData->txHexEnable)
             {
-                if((*this->textEditTx)!="")
-                {
-                    //16进制发送不进行编码处理
-                    if(this->vSerial->vSerialData->txHexEnable)
-                    {
-                        emit vTxMessage((*textEditTx)+LineFeed);
-                    }
-                    else
-                    {
-                        emit vTxMessage(CodeCoding((*textEditTx)+LineFeed));
-                    }
-                }
-            };break;
-            case SerialMul:
+                emit vTxMessage(*textEditTx);
+            }
+            else
             {
-                if(vLineEditTxCtr())
-                {
-                    if((*this->lineEditTx)!="")
-                    {
-                        if(this->vSerial->vSerialData->txHexEnable)
-                        {
-                            emit vTxMessage((*lineEditTx)+LineFeed);
-                        }
-                        else
-                        {
-                            emit vTxMessage(CodeCoding((*lineEditTx)+LineFeed));
-                        }
-                    }
-                }
-            };break;
-            case SerialAgr:
-            {
-                //按协议发送此处已在别处更改槽函数，此处不再配置，但是保留框架
-            };break;
-            default:break;
+                emit vTxMessage(CodeCoding(*textEditTx));
+            }
         }
     }
 }

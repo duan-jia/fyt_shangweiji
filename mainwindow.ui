@@ -17,9 +17,9 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>6</x>
+      <x>7</x>
       <y>6</y>
-      <width>822</width>
+      <width>821</width>
       <height>615</height>
      </rect>
     </property>
@@ -30,7 +30,7 @@
      <attribute name="title">
       <string>串口调试助手</string>
      </attribute>
-     <widget class="QCheckBox" name="timeTxBt">
+     <widget class="QCheckBox" name="timeTxCb">
       <property name="geometry">
        <rect>
         <x>470</x>

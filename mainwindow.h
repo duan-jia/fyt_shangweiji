@@ -43,7 +43,7 @@ public:
 public slots:
     /*------------------刷新配置-------------------*/
 //    void vRxSlotChanged(void);        //刷新接收槽函数连接
-//    void vTxSlotChanged(void);        //刷新发送槽函数连接
+    void vTxSlotChanged(void);        //刷新发送槽函数连接
 //    void vModuleChanged(qint16 index);//刷新Seasky协议模块
 //    void vRxTimerStampChanged(void);  //刷新接收时间戳使能
 //    void showRxHead(void);            //刷新协议RX显示
@@ -54,7 +54,7 @@ public slots:
 //    void vTxModeCfg(void);            //发送模式切换处理
 //    void vTxStampCfg(void);           //发送换行符控制
     void vTxModeTimerCfg(void);       //发送的定时器控制
-//    void vUpdateShow(void);           //同步窗口和变量数据
+    void vUpdateShow(void);           //同步窗口和变量数据
 
 signals:
     void vOpenSerial(bool & isOpen);

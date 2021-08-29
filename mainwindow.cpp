@@ -33,10 +33,17 @@ MainWindow::MainWindow(QWidget *parent)
     InitSerialTx();
 
     ReadSettings();
+
+    vUpdateShow();
 }
 
 MainWindow::~MainWindow()
 {
+    ui->plainTextRx->TimerStop();
+    this->vSerialCtr.vSeaskyPortCtr.timerStop();
+
+    this->vSerialCtr.vSeaskyPortCtr.vQTimerTxStop();
+    this->vSerialCtr.vQObjectTxCtr.vTimerStop();
     delete ui;
 }
 
@@ -191,7 +198,7 @@ void MainWindow::InitSerialTx(void)
     ui->spinBox->setValue(SerialTxTimerCfg);
     //发送的模式控制
     /*协议定时发送相关*/
-    connect(ui->timeTxBt,&QCheckBox::released,[=]()
+    connect(ui->timeTxCb,&QCheckBox::released,[=]()
     {
         //更新vQObjectTxCtr的发送定时器时间
         vTxModeTimerCfg();
@@ -306,7 +313,7 @@ void MainWindow::ReadSettings(void)
     //发送窗口的数据
     ui->spinBox->setValue(settings.value("TxTimerCnt",1).toInt());
     ui->hexCb->setChecked(settings.value("hexCb",false).toBool());
-    ui->timeTxBt->setChecked(settings.value("timeTxBt",false).toBool());
+    ui->timeTxCb->setChecked(settings.value("timeTxCb",false).toBool());
     ui->plainTextTx->TextTxBuff=settings.value("TxPlainText","").toByteArray();
 }
 //关闭时保存设置
@@ -326,7 +333,7 @@ void MainWindow::WriteSettings(void)
     settings.setValue("Checkout",ui->checkoutCb->currentIndex());
     //发送窗口的数据
     settings.setValue("TxPlainText",ui->plainTextTx->TextTxBuff);
-    settings.setValue("timeTxBt",ui->timeTxBt->isChecked());
+    settings.setValue("timeTxCb",ui->timeTxCb->isChecked());
     settings.setValue("hexCb", ui->hexCb->isChecked());
     settings.setValue("TxTimerCnt",ui->spinBox->value());
 
@@ -338,25 +345,24 @@ void MainWindow::closeEvent(QCloseEvent *event)
     WriteSettings();
     event->accept();
 }
-/******一些临时加的*/
-//发送的定时器控制
-void MainWindow::vTxModeTimerCfg(void)
+
+/*---------------------------刷新-------------------------------*/
+//同步窗口和变量数据
+void MainWindow::vUpdateShow(void)
 {
-    this->vSerialCtr.vQObjectTxCtr.vTimerSet(ui->spinBox->value());
-    if(!txModeCfg)
-    {
-        if(ui->timeTxBt->isChecked())
-        {
-            this->vSerialCtr.vQObjectTxCtr.vTimerStop();
-            this->vSerialCtr.vQObjectTxCtr.vTimerStart();
-        }
-        else
-        {
-            this->vSerialCtr.vQObjectTxCtr.vTimerStop();
-        }
-    }
+    //以下函数根据参数变化更新显示
+//    vRxSlotChanged();        //刷新接收槽函数连接
+    vTxSlotChanged();        //刷新发送槽函数连接
+//    vRxTimerStampChanged();  //刷新接收时间戳使能
+//    showRxHead();            //刷新协议RX显示
+//    showTxHead();            //刷新协议TX显示
+//    vPortShow();             //刷新协议显示
+//    vRxHexEnableCfg();       //刷新RxHexEnable
+    vTxHexEnableCfg();       //刷新TxHexEnable
+//    vTxModeCfg();            //发送模式切换处理
+//    vTxStampCfg();           //发送换行符控制
+    vTxModeTimerCfg();       //发送的定时器控制
 }
-/*---------------------------刷新槽函数-------------------------------*/
 //刷新TxHexEnable
 void MainWindow::vTxHexEnableCfg(void)
 {
@@ -369,6 +375,45 @@ void MainWindow::vTxHexEnableCfg(void)
         this->vSerialCtr.vSerial.vSerialData->txHexEnable = false;
     }
     emit txHexEnableChanged();
+}
+//发送的定时器控制
+void MainWindow::vTxModeTimerCfg(void)
+{
+    this->vSerialCtr.vQObjectTxCtr.vTimerSet(ui->spinBox->value());
+
+    if(ui->timeTxCb->isChecked())
+    {
+        this->vSerialCtr.vQObjectTxCtr.vTimerStop();
+        this->vSerialCtr.vQObjectTxCtr.vTimerStart();
+    }
+    else
+    {
+        this->vSerialCtr.vQObjectTxCtr.vTimerStop();
+    }
+
+}
+//根据配置更新槽函数,以及更新显示
+void MainWindow::vTxSlotChanged(void)
+{
+    if(txModeCfg)
+    {
+        //设置vQObjectTxCtr的发送定时器无法启动
+        this->vSerialCtr.vQObjectTxCtr.vTimerStop();
+        ui->timeTxCb->setChecked(false);
+        ui->timeTxCb->setEnabled(false);
+        //先断开所有，避免重复套用了链接
+        this->vSerialCtr.vQObjectTxCtr.vDisConnectTx();
+        this->vSerialCtr.vSeaskyPortCtr.vDisConnectTx();
+        this->vSerialCtr.vSeaskyPortCtr.vConnectTx();
+    }
+    else
+    {
+        this->vSerialCtr.vQObjectTxCtr.vDisConnectTx();
+        this->vSerialCtr.vSeaskyPortCtr.vDisConnectTx();
+        this->vSerialCtr.vQObjectTxCtr.vConnectTx();
+        //恢复vQObjectTxCtr的发送定时器权力
+        ui->timeTxCb->setEnabled(true);
+    }
 }
 /*---------------------------提示窗口-------------------------------*/
 /*错误*/
