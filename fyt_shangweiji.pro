@@ -4,6 +4,14 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
 
+LIBS += -lOpengl32 \
+        -lglu32 \
+#        -lglut
+
+# 支持OpenGL
+DEFINES += QCUSTOMPLOT_USE_OPENGL\
+           QT_DEPRECATED_WARNINGS
+
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -18,6 +26,12 @@ DEFINES += QT_DEPRECATED_WARNINGS \
 
 SOURCES += \
     control_class/vCombox.cpp \
+    control_class/vOpenGL/model.cpp \
+    control_class/vOpenGL/openglscene.cpp \
+    control_class/vOpenGL/vopenglwidget.cpp \
+    control_class/vQCustomplot/qcustomplot.cpp \
+    control_class/vQCustomplot/vTracer.cpp \
+    control_class/vQCustomplot/vqcustomplot.cpp \
     control_class/vplaintextedit.cpp \
     control_class/vqlineedithex.cpp \
     control_class/vqtextedit.cpp \
@@ -35,6 +49,13 @@ SOURCES += \
 
 HEADERS += \
     control_class/vCombox.h \
+    control_class/vOpenGL/model.h \
+    control_class/vOpenGL/openglscene.h \
+    control_class/vOpenGL/point3d.h \
+    control_class/vOpenGL/vopenglwidget.h \
+    control_class/vQCustomplot/qcustomplot.h \
+    control_class/vQCustomplot/vqcustomplot.h \
+    control_class/vQCustomplot/vtracer.h \
     control_class/vplaintextedit.h \
     control_class/vqlineedithex.h \
     control_class/vqtextedit.h \
@@ -53,7 +74,9 @@ FORMS += \
     mainwindow.ui
 
 INCLUDEPATH += ./device\
-                ./control_class
+                ./control_class \
+                ./control_class/vQCustomplot\
+                ./control_class/vOpenGL\
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -62,4 +85,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 # 支持QCustomPlot
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
+
+DISTFILES += \
+    control_class/vQCustomplot/GPL.txt \
+    control_class/vQCustomplot/changelog.txt
 

@@ -41,7 +41,6 @@ MainWindow::~MainWindow()
 {
     ui->plainTextRx->TimerStop();
     this->vSerialCtr.vSeaskyPortCtr.timerStop();
-
     this->vSerialCtr.vSeaskyPortCtr.vQTimerTxStop();
     this->vSerialCtr.vQObjectTxCtr.vTimerStop();
     delete ui;
