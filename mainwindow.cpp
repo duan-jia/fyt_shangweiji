@@ -213,7 +213,7 @@ void MainWindow::InitSerialTx(void)
             ui->plainTextTx,
             &vQTextEdit::hexEnableChanged);
     //发送窗口hex格式改变
-    connect(ui->hexCb,&QCheckBox::released,
+    connect(ui->txHexCb,&QCheckBox::released,
             this,&MainWindow::vTxHexEnableCfg);
     // 定时器发送启动控制
     connect(ui->txBt,
@@ -311,7 +311,7 @@ void MainWindow::ReadSettings(void)
     ui->checkoutCb->setCurrentIndex(settings.value("Checkout",QVariant(0)).toInt());
     //发送窗口的数据
     ui->spinBox->setValue(settings.value("TxTimerCnt",1).toInt());
-    ui->hexCb->setChecked(settings.value("hexCb",false).toBool());
+    ui->txHexCb->setChecked(settings.value("txHexCb",false).toBool());
     ui->timeTxCb->setChecked(settings.value("timeTxCb",false).toBool());
     ui->plainTextTx->TextTxBuff=settings.value("TxPlainText","").toByteArray();
 }
@@ -333,7 +333,7 @@ void MainWindow::WriteSettings(void)
     //发送窗口的数据
     settings.setValue("TxPlainText",ui->plainTextTx->TextTxBuff);
     settings.setValue("timeTxCb",ui->timeTxCb->isChecked());
-    settings.setValue("hexCb", ui->hexCb->isChecked());
+    settings.setValue("txHexCb", ui->txHexCb->isChecked());
     settings.setValue("TxTimerCnt",ui->spinBox->value());
 
     settings.endGroup();
@@ -365,7 +365,7 @@ void MainWindow::vUpdateShow(void)
 //刷新TxHexEnable
 void MainWindow::vTxHexEnableCfg(void)
 {
-    if(ui->hexCb->isChecked())
+    if(ui->txHexCb->isChecked())
     {
         this->vSerialCtr.vSerial.vSerialData->txHexEnable = true;
     }

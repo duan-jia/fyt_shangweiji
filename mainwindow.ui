@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>834</width>
-    <height>679</height>
+    <width>892</width>
+    <height>706</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,12 +19,12 @@
      <rect>
       <x>7</x>
       <y>6</y>
-      <width>821</width>
-      <height>615</height>
+      <width>871</width>
+      <height>661</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab1">
      <attribute name="title">
@@ -253,11 +253,37 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QCheckBox" name="hexCb">
+     <widget class="QCheckBox" name="txHexCb">
       <property name="geometry">
        <rect>
         <x>470</x>
         <y>440</y>
+        <width>91</width>
+        <height>19</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>16进制</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="AnoCb">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>300</y>
+        <width>91</width>
+        <height>19</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>使能协议</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="rxHexCb">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>260</y>
         <width>91</width>
         <height>19</height>
        </rect>
@@ -271,6 +297,16 @@
      <attribute name="title">
       <string>参数调节</string>
      </attribute>
+     <widget class="vQCustomPlot" name="widgetSocpe" native="true">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>10</y>
+        <width>741</width>
+        <height>431</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
@@ -284,7 +320,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>834</width>
+     <width>892</width>
      <height>26</height>
     </rect>
    </property>
@@ -306,6 +342,12 @@
    <class>vCombox</class>
    <extends>QComboBox</extends>
    <header>vcombox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>vQCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>vqcustomplot.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
