@@ -260,8 +260,9 @@ void vSeaskyPort::vSeaskyRxIRQ(void)
                     {
                        this->vRxdata.append(this->vProtocol.rx_info.data[i]);
                     }
-                    ShowQVariant.setValue(this->vRxdata);
-                    emit RxScope(ShowQVariant);
+
+                    this->JudgeID(this->vProtocol.rx_info.cmd_id);//根据ID来判断要执行的功能
+
                     //待接收长度清零
                     thisLength = 0;
                     //如果有数据未处理
@@ -362,7 +363,74 @@ void vSeaskyPort::vSeaskyRxIRQ(const QByteArray &str)
         return;
     }
 }
-void vSeaskyPort::vHeadCheck(void)
+//换种接收处理数据方式
+void vSeaskyPort::vSeaskyRx(void)
+{
+    QByteArray vRxSerialBuff;
+    if(this->vSerial!=nullptr)
+    {
+        if(this->vSerial->qSerial->isOpen())
+        {
+            vRxSerialBuff = this->vSerial->qSerial->readAll();
+        }
+        if(vRxSerialBuff.isEmpty())
+        {
+            return;
+        }
+        else
+        {
+            vRxBuff.append(vRxSerialBuff);
+        }
+        //
+        if(vRxBuff.length() >= 15)
+        {
+            while ((vRxBuff.length()>10) && (vRxBuff.at(0)!=char(0XA5)))
+            {
+                vRxBuff.remove(0,1);
+            }
+            if(vHeadCheck())
+            {
+                if(thisLength<=vRxBuff.length())//如果现在达到了读取数据量
+                {
+                    if( this->vProtocol.get_protocol_info(
+                        this->vProtocol.rx_info.utf8_data,
+                        &rx_pos,
+                        &this->vProtocol.rx_info.flags_register,
+                        this->vProtocol.rx_info.data))
+                    {
+                        //删除已使用
+                        vRxBuff.remove(0,thisLength);
+                        //获取接收数据的时间戳
+                        QString timeString;
+                        timeString = QDateTime::currentDateTime().toString("[yyyy-MM-dd hh:mm:ss.zzz]\n");
+                        /*获取CMDID*/
+                        this->vProtocol.rx_info.cmd_id =
+                        this->vProtocol.rx_pro.cmd_id;
+                        /*获取数据长度*/
+                        this->vProtocol.rx_info.float_len =
+                        (this->vProtocol.rx_pro.header.data_length-2)/4;
+                        /*获取字符长度*/
+                        this->vProtocol.rx_info.utf8_data_len =
+                        this->vProtocol.rx_date_length;
+                        /*加入显示*/
+                        vUpdateShowBuff(timeString);
+                        /*加入示波器*/
+                        this->vRxdata.clear();
+                        for(qint8 i=0;i<this->vProtocol.rx_info.float_len;i++)
+                        {
+                           this->vRxdata.append(this->vProtocol.rx_info.data[i]);
+                        }
+                        this->JudgeID(this->vProtocol.rx_info.cmd_id);//根据ID来判断要执行的功能
+
+                        //待接收长度清零
+                        thisLength = 0;
+                    }
+                }
+            }
+        }
+    }
+}
+bool vSeaskyPort::vHeadCheck(void)
 {
     /************此部分用于将数据连接起来************/
     this->vProtocol.rx_info.utf8_data
@@ -383,16 +451,22 @@ void vSeaskyPort::vHeadCheck(void)
             {
                 thisLength = 0;
                 vRxBuff.clear();
+                return 0;
             }
-            return;
+            return 1;
         }
         else
         {
             //帧头校验解析失败
             thisLength = 0;
-            vRxBuff.clear();
-            return;
+            vRxBuff.remove(0,1);//删除0x5A头帧
+//            vRxBuff.clear();
+            return 0;
         }
+    }
+    else
+    {
+        return  0;
     }
 }
 void vSeaskyPort::setPlainEdit(vPlainTextEdit * edit)
@@ -489,6 +563,26 @@ void vSeaskyPort::vQueryPIDCheckout(void)
     {
         //报错
     }
+}
+
+void vSeaskyPort::JudgeID(uint16_t ID)
+{
+    switch (ID)
+    {
+    case 0x0001://ID为1波形显示
+        ShowQVariant.setValue(this->vRxdata);
+        emit RxScope(ShowQVariant);
+        break;
+
+    case 0x0002://ID为2
+
+        break;
+    case 0x0003:
+        break;
+    default:
+        break;
+    }
+
 }
 
 vSeaskyPortQThread::vSeaskyPortQThread(QObject *parent) : QThread(parent)

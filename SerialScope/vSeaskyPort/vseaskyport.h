@@ -83,17 +83,20 @@ public:
     void setPlainEdit(vPlainTextEdit * edit);
     void timerStart(void);
     void timerStop(void);
-    void vHeadCheck(void);
+    bool vHeadCheck(void);
     void vUpdateShowBuff(const QString &currentTimer);
     void setQWidgetAddr(QWidget * addrTx,QWidget * addrRx);
     void setRxSeaskyAddr(QString * strF,QString * strN,QString * strU,float * addrF);
     void setTxSeaskyAddr(QString * strF,QString * strN,QString * strU,float * addrF);
     void configQWidgetRx(qint32 num);
     void configQWidgetTx(qint32 num);
+
+    void JudgeID(uint16_t ID);
 public slots:
     void vSeaskyRxIRQ(void);
     void vSeaskyRxIRQ(const QByteArray &str);
     void vSeaskyTxSlot(void);
+    void vSeaskyRx(void);
 
     void vQueryPIDTx(void);//发送查询PID指令
     void vQueryPIDCheckout(void);
