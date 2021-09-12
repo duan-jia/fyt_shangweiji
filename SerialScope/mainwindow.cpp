@@ -86,6 +86,8 @@ MainWindow::MainWindow(QWidget *parent)
     vInitControl();//设置控件
     //10.配置刷新相关的定时器
     vShowTimerCfg();
+    //11,初始化参数调节
+    vShowPIDInit();
     //
     vReadSettings();
     /*更新一次界面显示*/
@@ -566,6 +568,8 @@ void MainWindow::vInitSerialTx(void)
             emit txHexEnableChanged();
         }
     });
+
+
 }
 
 //6.加载信息接收配置
@@ -660,7 +664,7 @@ void MainWindow::vInitSeasky(void)
             addr=QByteArray::fromHex(
                     ui->lineEdit_4->text().mid(2,6).toUtf8());
             this->vSerialCtr.vSeaskyPortCtr.vTxSeasky.vCmdId =
-                    ((addr[1])& 0x00FF)|((addr[0] << 8) & 0xFF00);
+                    ((addr[1])& 0x00FF)|((addr[0] << 8) & 0xFF00);//转化为16进制
             //配置保存到配置文件
             vSaveModule();
         }
@@ -847,6 +851,11 @@ void MainWindow::vShowTimerCfg(void)
     this->vSerialCtr.vSeaskyPortCtr.timerStart();
     ui->widgetScope->TimerStart();
     vTabTimerCfg();
+}
+//初始化参数调节
+void MainWindow::vShowPIDInit(void)
+{
+    connect(ui->PIDReadBt, &QPushButton::released, this, &MainWindow::showPID);
 }
 //读取串口配置
 void MainWindow::readSerialChange(void)
@@ -1474,8 +1483,9 @@ void MainWindow::vSaveModule(void)
 }
 void MainWindow::showPID(void)
 {
-    ui->lineEdit_P1->setText(0);
+    emit this->vSerialCtr.vSeaskyPortCtr.vSendQuery();//发送查询信号
 }
+
 void MainWindow::vTabTimerCfg(void)
 {
     /*  显示相关的定时器

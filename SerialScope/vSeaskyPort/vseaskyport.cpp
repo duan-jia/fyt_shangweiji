@@ -11,6 +11,9 @@ vSeaskyPort::vSeaskyPort(QWidget *parent) : QObject(parent)
     vQTimerTxStop();
     connect(&this->vQTimerTx,&QTimer::timeout,
             this,&vSeaskyPort::vSeaskyTxSlot);
+
+    connect(this, &vSeaskyPort::vSendQuery,this, &vSeaskyPort::vQueryPIDTx);
+    connect(&this->vQTimerQuery, &QTimer::timeout, this, &vSeaskyPort::vQueryPIDCheckout);
 }
 void vSeaskyPort::vConnectRx(void)
 {
@@ -454,6 +457,40 @@ void vSeaskyPort::vSeaskyTxSlot(void)
         emit vSerialTx(vSeaskyTxBuff);
     }
 }
+void vSeaskyPort::vQueryPIDTx(void)
+{
+    this->queryFlag = true;
+
+    this->vQTimerQuery.start(2000);
+
+    this->vProtocol.query_info.cmd_id = QueryID;
+    this->vProtocol.query_info.flags_register = this->vTxSeasky.vReg;
+    this->vProtocol.query_info.float_len = 0;
+    this->vProtocol.get_protocol_send_data(
+                this->vProtocol.query_info.cmd_id,
+                this->vProtocol.query_info.flags_register,
+                this->vProtocol.query_info.data,
+                this->vProtocol.query_info.float_len,
+                this->vProtocol.query_info.utf8_data,
+                &this->vProtocol.query_info.utf8_data_len);
+    vSeaskyTxBuff=QByteArray(reinterpret_cast<const char*>(this->vProtocol.tx_info.utf8_data),
+                this->vProtocol.tx_info.utf8_data_len);
+    emit vSerialTx(vSeaskyTxBuff);
+}
+void vSeaskyPort::vQueryPIDCheckout(void)
+{
+    this->vQTimerQuery.stop();
+
+    if(this->queryFlag == false)
+    {
+        //
+    }
+    else
+    {
+        //报错
+    }
+}
+
 vSeaskyPortQThread::vSeaskyPortQThread(QObject *parent) : QThread(parent)
 {
 

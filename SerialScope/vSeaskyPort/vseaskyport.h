@@ -13,6 +13,9 @@
 #include <vserialport.h>
 
 #include <QDebug>
+/*------------------define-------------------------------*/
+#define QueryID 0x0003
+
 typedef struct
 {
     QString * vQString; //float转str数据
@@ -63,6 +66,10 @@ public:
     //用于协议发送计时器
     QTimer    vQTimerTx;
     qint32    vQtimerTxCnt=100;
+
+    QTimer vQTimerQuery;
+    bool queryFlag;
+
     void setTimer(qint32 Cnt)
     {
         timerCntSet = Cnt;
@@ -87,6 +94,9 @@ public slots:
     void vSeaskyRxIRQ(void);
     void vSeaskyRxIRQ(const QByteArray &str);
     void vSeaskyTxSlot(void);
+
+    void vQueryPIDTx(void);//发送查询PID指令
+    void vQueryPIDCheckout(void);
 private:
     qint32  vTxNum,vRxNum;
     qint32  vTxNumUTF8,vRxNumUTF8;
@@ -99,6 +109,8 @@ signals:
     void showRxHead(void);
     void vSerialTx(const QByteArray & str);
     void RxScope(const QVariant &rxData);
+
+    void vSendQuery(void);
 };
 class vSeaskyPortQThread : public QThread
 {
