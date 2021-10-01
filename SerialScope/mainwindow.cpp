@@ -1552,7 +1552,7 @@ void MainWindow::vTabTimerCfg(void)
             }
             if(this->vSerialCtr.vSeaskyPortCtr.vQTimerEnable == true)
             {
-                this->vSerialCtr.vSeaskyPortCtr.vQTimer.stop();
+                this->vSerialCtr.vSeaskyPortCtr.vQTimer.start();
             }
         };break;//串口示波器界面
         default:break;
