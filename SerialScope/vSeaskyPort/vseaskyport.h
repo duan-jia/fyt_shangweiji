@@ -14,7 +14,7 @@
 
 #include <QDebug>
 /*------------------define-------------------------------*/
-#define QueryID 0x0003
+#define QueryID 0x0002
 
 typedef struct
 {
@@ -48,6 +48,7 @@ public:
     QWidget        * vRxEdit;
     vSeaskyData vRxSeasky;
     vSeaskyData vTxSeasky;
+    vSeaskyData PIDdata;
 
     QVector<float> vRxdata;
     QVector<float> RxPID;
@@ -88,6 +89,9 @@ public:
     void setQWidgetAddr(QWidget * addrTx,QWidget * addrRx);
     void setRxSeaskyAddr(QString * strF,QString * strN,QString * strU,float * addrF);
     void setTxSeaskyAddr(QString * strF,QString * strN,QString * strU,float * addrF);
+
+    void setPIDAddr(QString * strF,QString * strN,QString * strU,float * addrF);
+
     void configQWidgetRx(qint32 num);
     void configQWidgetTx(qint32 num);
 
@@ -100,6 +104,7 @@ public slots:
 
     void vQueryPIDTx(void);//发送查询PID指令
     void vQueryPIDCheckout(void);
+    void vWritePID(void);
 private:
     qint32  vTxNum,vRxNum;
     qint32  vTxNumUTF8,vRxNumUTF8;
@@ -113,6 +118,8 @@ signals:
     void vSerialTx(const QByteArray & str);
     void RxScope(const QVariant &rxData);
 
+    void ReadPID(void);
+    void WritePID(void);
     void vSendQuery(void);
 };
 class vSeaskyPortQThread : public QThread

@@ -39,6 +39,11 @@ QString vTxName[SeaskyPortNum];
 QString vTxUnit[SeaskyPortNum];
 float   vTxfloat[SeaskyPortNum];
 uint8_t vTxUtf8[Utf8MaxLen];
+QString vPIDQString[SeaskyPortNum];
+QString vPIDName[SeaskyPortNum];
+QString vPIDUnit[SeaskyPortNum];
+float   vPIDfloat[SeaskyPortNum];
+uint8_t vPIDUtf8[SeaskyPortNum];
 bool    rxSeaskyHexEnable = false;       //16进制格式接收使能
 
 const QString ModulePath = "/Config/ModulePath";
@@ -133,6 +138,7 @@ void MainWindow::vDependenceAddr(void)
                 &vRxQString[0],&vRxName[0],&vRxUnit[0],&vRxfloat[0]);
     this->vSerialCtr.vSeaskyPortCtr.setTxSeaskyAddr(
                 &vTxQString[0],&vTxName[0],&vTxUnit[0],&vTxfloat[0]);
+    this->vSerialCtr.vSeaskyPortCtr.setPIDAddr(&vPIDQString[0],&vPIDName[0],&vPIDUnit[0],&vPIDfloat[0]);
     /*波形显示控件波形名称查询地址*/
     ui->widgetScope->vSetNameAddr(&vRxName[0]);
     /*协议操作地址受此分配*/
@@ -140,6 +146,8 @@ void MainWindow::vDependenceAddr(void)
     this->vSerialCtr.vSeaskyPortCtr.vProtocol.rx_info.data =     &vRxfloat[0];
     this->vSerialCtr.vSeaskyPortCtr.vProtocol.tx_info.utf8_data = &vTxUtf8[0];
     this->vSerialCtr.vSeaskyPortCtr.vProtocol.tx_info.data =     &vTxfloat[0];
+    this->vSerialCtr.vSeaskyPortCtr.vProtocol.query_info.utf8_data = &vPIDUtf8[0];
+    this->vSerialCtr.vSeaskyPortCtr.vProtocol.query_info.data = &vPIDfloat[0];
     /*显示数据地址*/
     ui->plainTextRx->SetShowBuffAddr(&this->vSerialCtr.vSerial.vSerialData->RxBuff);
     //串口发送，hex格式共享，所有控件建议只读
@@ -525,6 +533,16 @@ void MainWindow::vInitSerialTx(void)
         //更新vQObjectTxCtr的发送定时器时间
         vTxModeTimerCfg();
     });
+
+    connect(ui->PIDReadBt, &QPushButton::released,[=]
+    {
+        emit this->vSerialCtr.vSeaskyPortCtr.ReadPID();
+    });
+    connect(ui->PIDWriteBt, &QPushButton::released,[=]
+    {
+        emit this->vSerialCtr.vSeaskyPortCtr.WritePID();
+    });
+
     connect(ui->spinBox,&QSpinBox::editingFinished,[=]()
     {
         //更新vQObjectTxCtr的发送定时器时间
@@ -699,6 +717,38 @@ void MainWindow::vInitSeasky(void)
             vSaveModule();
         }
     });
+    //关于PID发送与查询的lineedit
+    connect(ui->lineEdit_P1,&QLineEdit::editingFinished, [=]()
+    {
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[0] = ui->lineEdit_P1->text();
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vFloat[0] = this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[0].toDouble();
+    });
+    connect(ui->lineEdit_I1,&QLineEdit::editingFinished, [=]()
+    {
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[1] = ui->lineEdit_I1->text();
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vFloat[1] = this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[1].toDouble();
+    });
+    connect(ui->lineEdit_D1,&QLineEdit::editingFinished, [=]()
+    {
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[2] = ui->lineEdit_D1->text();
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vFloat[2] = this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[2].toDouble();
+    });
+    connect(ui->lineEdit_P2,&QLineEdit::editingFinished, [=]()
+    {
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[3] = ui->lineEdit_P2->text();
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vFloat[3] = this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[3].toDouble();
+    });
+    connect(ui->lineEdit_I2,&QLineEdit::editingFinished, [=]()
+    {
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[4] = ui->lineEdit_I2->text();
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vFloat[4] = this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[4].toDouble();
+    });
+    connect(ui->lineEdit_D2,&QLineEdit::editingFinished, [=]()
+    {
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[5] = ui->lineEdit_D2->text();
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vFloat[5] = this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[5].toDouble();
+    });
+
     //数据更新，子控件通知父级刷新界面
     connect(&this->vSerialCtr.vSeaskyPortCtr,
             &vSeaskyPort::showRxHead,
@@ -1285,6 +1335,7 @@ void MainWindow::vTxModeCfg(void)
         //关闭定时器，协议发送定时器
         this->vSerialCtr.vSeaskyPortCtr.vQTimerTxStop();
     }
+
 }
 //发送换行符控制
 void MainWindow::vTxStampCfg(void)
@@ -1483,7 +1534,18 @@ void MainWindow::vSaveModule(void)
 }
 void MainWindow::showPID(void)
 {
-    emit this->vSerialCtr.vSeaskyPortCtr.vSendQuery();//发送查询信号
+    for(int i = 0; i < 6; i++)
+    {
+        this->vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[i] = QString::number((this->vSerialCtr.vSeaskyPortCtr.vRxSeasky.vFloat[i]),'f',6);
+        this->vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[i].remove(QRegExp("0*$"));
+        this->vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[i].remove(QRegExp("[.]$"));
+    }
+    ui->lineEdit_P1->setText(vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[0]);
+    ui->lineEdit_I1->setText(vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[1]);
+    ui->lineEdit_D1->setText(vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[2]);
+    ui->lineEdit_P2->setText(vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[3]);
+    ui->lineEdit_I2->setText(vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[4]);
+    ui->lineEdit_D2->setText(vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[5]);
 }
 
 void MainWindow::vTabTimerCfg(void)
@@ -1552,8 +1614,14 @@ void MainWindow::vTabTimerCfg(void)
             }
             if(this->vSerialCtr.vSeaskyPortCtr.vQTimerEnable == true)
             {
-                this->vSerialCtr.vSeaskyPortCtr.vQTimer.start();
+                this->vSerialCtr.vSeaskyPortCtr.vQTimer.stop();
             }
+            this->vSerialCtr.vSeaskyPortCtr.vQTimerTxStop();//把协议定时发送关闭，后续应该有bug
+            //按协议发送
+            this->vSerialCtr.vQObjectTxCtr.vSerialTxMode = SerialAgr;
+            //协议使能
+            txModeCfg = true;
+            this->vTxSlotChanged();
         };break;//串口示波器界面
         default:break;
     }

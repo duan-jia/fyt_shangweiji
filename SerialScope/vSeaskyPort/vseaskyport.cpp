@@ -12,7 +12,10 @@ vSeaskyPort::vSeaskyPort(QWidget *parent) : QObject(parent)
     connect(&this->vQTimerTx,&QTimer::timeout,
             this,&vSeaskyPort::vSeaskyTxSlot);
 
-    connect(this, &vSeaskyPort::vSendQuery,this, &vSeaskyPort::vQueryPIDTx);
+
+    connect(this, &vSeaskyPort::ReadPID, this, &vSeaskyPort::vQueryPIDTx);
+    connect(this, &vSeaskyPort::WritePID, this, &vSeaskyPort::WritePID);
+//    connect(this, &vSeaskyPort::vSendQuery,this, &vSeaskyPort::vQueryPIDTx);
     connect(&this->vQTimerQuery, &QTimer::timeout, this, &vSeaskyPort::vQueryPIDCheckout);
 }
 void vSeaskyPort::vConnectRx(void)
@@ -57,6 +60,13 @@ void vSeaskyPort::setTxSeaskyAddr(QString * strF,QString * strN,QString * strU,f
     this->vTxSeasky.vName = strN;
     this->vTxSeasky.vUnit = strU;
     this->vTxSeasky.vFloat = addrF;
+}
+void vSeaskyPort::setPIDAddr(QString *strF, QString *strN, QString *strU, float *addrF)
+{
+    this->PIDdata.vQString = strF;
+    this->PIDdata.vName = strN;
+    this->PIDdata.vUnit = strU;
+    this->PIDdata.vFloat = addrF;
 }
 
 
@@ -533,10 +543,9 @@ void vSeaskyPort::vSeaskyTxSlot(void)
 }
 void vSeaskyPort::vQueryPIDTx(void)
 {
-    this->queryFlag = true;
+//    this->queryFlag = true;
 
-    this->vQTimerQuery.start(2000);
-
+//    this->vQTimerQuery.start(2000);//定时器不能在另一个线程中被打开？
     this->vProtocol.query_info.cmd_id = QueryID;
     this->vProtocol.query_info.flags_register = this->vTxSeasky.vReg;
     this->vProtocol.query_info.float_len = 0;
@@ -547,9 +556,14 @@ void vSeaskyPort::vQueryPIDTx(void)
                 this->vProtocol.query_info.float_len,
                 this->vProtocol.query_info.utf8_data,
                 &this->vProtocol.query_info.utf8_data_len);
-    vSeaskyTxBuff=QByteArray(reinterpret_cast<const char*>(this->vProtocol.tx_info.utf8_data),
-                this->vProtocol.tx_info.utf8_data_len);
+    vSeaskyTxBuff=QByteArray(reinterpret_cast<const char*>(this->vProtocol.query_info.utf8_data),
+                this->vProtocol.query_info.utf8_data_len);
     emit vSerialTx(vSeaskyTxBuff);
+}
+void vSeaskyPort::vWritePID(void)
+{
+
+
 }
 void vSeaskyPort::vQueryPIDCheckout(void)
 {
@@ -575,9 +589,10 @@ void vSeaskyPort::JudgeID(uint16_t ID)
         break;
 
     case 0x0002://ID为2
-
+        //一般为上位机查询指令
         break;
     case 0x0003:
+
         break;
     default:
         break;

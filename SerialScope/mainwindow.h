@@ -96,6 +96,7 @@ public slots:
     void vRxTimerStampChanged(void);  //刷新接收时间戳使能
     void showRxHead(void);            //刷新协议RX显示
     void showTxHead(void);            //刷新协议TX显示
+
     void vPortShow(void);             //刷新协议显示
     void vRxHexEnableCfg(void);       //刷新RxHexEnable
     void vTxHexEnableCfg(void);       //刷新TxHexEnable
@@ -110,6 +111,7 @@ public slots:
     /*-------------------------------------------*/
     void vImportLineText(QString str);//导入Csv数据配置
     /*-------------------------------------------*/
+//    void
     void showPID(void);//显示参数
     /*-------------------------------------------*/
     void vTabTimerCfg(void);
