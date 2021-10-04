@@ -258,11 +258,6 @@ void vSeaskyPort::vSeaskyRx(void)
                         /*加入显示*/
                         vUpdateShowBuff(timeString);
                         /*加入示波器*/
-                        this->vRxdata.clear();
-                        for(qint8 i=0;i<this->vProtocol.rx_info.float_len;i++)
-                        {
-                           this->vRxdata.append(this->vProtocol.rx_info.data[i]);
-                        }
                         this->JudgeID(this->vProtocol.rx_info.cmd_id);//根据ID来判断要执行的功能
 
                         //待接收长度清零
@@ -401,6 +396,7 @@ void vSeaskyPort::vWritePID(void)
 {
 
 
+
 }
 void vSeaskyPort::vQueryPIDCheckout(void)
 {
@@ -421,6 +417,11 @@ void vSeaskyPort::JudgeID(uint16_t ID)
     switch (ID)
     {
     case 0x0001://ID为1波形显示
+        this->vRxdata.clear();
+        for(qint8 i=0;i<this->vProtocol.rx_info.float_len;i++)
+        {
+           this->vRxdata.append(this->vProtocol.rx_info.data[i]);
+        }
         ShowQVariant.setValue(this->vRxdata);
         emit RxScope(ShowQVariant);
         break;
@@ -429,7 +430,11 @@ void vSeaskyPort::JudgeID(uint16_t ID)
         //一般为上位机查询指令
         break;
     case 0x0003:
-
+        //PID数据传输
+        for(qint8 i = 0;i < vProtocol.rx_info.float_len;i++)
+        {
+            this->PIDdata.vFloat[i] = this->vProtocol.rx_info.data[i];
+        }
         break;
     default:
         break;
