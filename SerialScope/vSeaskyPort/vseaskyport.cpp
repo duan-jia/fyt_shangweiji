@@ -16,18 +16,18 @@ vSeaskyPort::vSeaskyPort(QWidget *parent) : QObject(parent)
     connect(this, &vSeaskyPort::ReadPID, this, &vSeaskyPort::vQueryPIDTx);
     connect(this, &vSeaskyPort::WritePID, this, &vSeaskyPort::WritePID);
 //    connect(this, &vSeaskyPort::vSendQuery,this, &vSeaskyPort::vQueryPIDTx);
-    connect(&this->vQTimerQuery, &QTimer::timeout, this, &vSeaskyPort::vQueryPIDCheckout);
+//    connect(&this->vQTimerQuery, &QTimer::timeout, this, &vSeaskyPort::vQueryPIDCheckout);
 }
 void vSeaskyPort::vConnectRx(void)
 {
     void(vSeaskyPort:: * rxSlot)(void) =
-            &vSeaskyPort::vSeaskyRxIRQ;
+            &vSeaskyPort::vSeaskyRx;
     connect(this->vSerial->qSerial,&QSerialPort::readyRead,
             this,rxSlot,Qt::QueuedConnection);
 }
 void vSeaskyPort::vDisConnectRx(void)
 {
-    void(vSeaskyPort:: * rxSlot)(void) = &vSeaskyPort::vSeaskyRxIRQ;
+    void(vSeaskyPort:: * rxSlot)(void) = &vSeaskyPort::vSeaskyRx;
     disconnect(this->vSerial->qSerial,&QSerialPort::readyRead,
             this,rxSlot);
 }
@@ -206,173 +206,6 @@ void vSeaskyPort::timerStop(void)
     }
 }
 
-//由于追求极高的解析效率，嵌入式端尽可能打包发送，异常断帧情况将极大的影响程序效率，甚至于造成程序崩溃
-void vSeaskyPort::vSeaskyRxIRQ(void)
-{
-    QByteArray vRxSerialBuff;
-    if(this->vSerial!=nullptr)
-    {
-        if(this->vSerial->qSerial->isOpen())
-        {
-            vRxSerialBuff = this->vSerial->qSerial->readAll();
-        }
-        if(vRxSerialBuff.isEmpty())
-        {
-            return;
-        }
-        //检验数据帧头,帧头固定为(0XA5),同时务必确认帧头与上一帧数据有时差，协议容错//有个判断应该不要
-        if(vRxSerialBuff.at(0)==char(0XA5))
-        {
-            vRxBuff = vRxSerialBuff;
-        }
-        else if((!vRxBuff.isEmpty())&&
-                 (vRxBuff.at(0)==char(0XA5)))
-        {
-            vRxBuff.append(vRxSerialBuff);
-        }
-        else
-        {
-            return;
-        }
-        //数据帧协议解析，以及判断，需要先具备10个字符，即包含完整的帧头，帧尾数据
-        if((vRxBuff.at(0)==char(0XA5))
-             &&(vRxBuff.length()>=10))
-        {
-            vHeadCheck();
-            //协议处理，如果现有数据大于数据帧长度
-            if(thisLength<=vRxBuff.length())//如果现在达到了读取数据量
-            {
-                if( this->vProtocol.get_protocol_info(
-                    this->vProtocol.rx_info.utf8_data,
-                    &rx_pos,
-                    &this->vProtocol.rx_info.flags_register,
-                    this->vProtocol.rx_info.data))
-                {
-                    //删除已使用
-                    vRxBuff.remove(0,thisLength);
-                    //获取接收数据的时间戳
-                    QString timeString;
-                    timeString = QDateTime::currentDateTime().toString("[yyyy-MM-dd hh:mm:ss.zzz]\n");
-                    /*获取CMDID*/
-                    this->vProtocol.rx_info.cmd_id =
-                    this->vProtocol.rx_pro.cmd_id;
-                    /*获取数据长度*/
-                    this->vProtocol.rx_info.float_len =
-                    (this->vProtocol.rx_pro.header.data_length-2)/4;
-                    /*获取字符长度*/
-                    this->vProtocol.rx_info.utf8_data_len =
-                    this->vProtocol.rx_date_length;
-                    /*加入显示*/
-                    vUpdateShowBuff(timeString);
-                    /*加入示波器*/
-                    this->vRxdata.clear();
-                    for(qint8 i=0;i<this->vProtocol.rx_info.float_len;i++)
-                    {
-                       this->vRxdata.append(this->vProtocol.rx_info.data[i]);
-                    }
-
-                    this->JudgeID(this->vProtocol.rx_info.cmd_id);//根据ID来判断要执行的功能
-
-                    //待接收长度清零
-                    thisLength = 0;
-                    //如果有数据未处理
-                    if(vRxBuff.length()>=10)
-                    {
-                        vSeaskyRxIRQ(vRxBuff);
-                    }
-                }
-                else
-                {
-                    //解析失败判断
-                    thisLength = 0;
-                    //删除已使用
-                    vRxBuff.remove(0,thisLength);
-                    //如果有数据未处理
-                    if(!vRxBuff.isEmpty())
-                    {
-                        //直接当新数据处理
-                        vSeaskyRxIRQ(vRxBuff);
-                    }
-                }
-            }
-            return;
-        }
-    }
-}
-//由于追求极高的解析效率，嵌入式端尽可能打包发送，异常断帧情况将极大的影响程序效率，甚至于造成程序崩溃
-void vSeaskyPort::vSeaskyRxIRQ(const QByteArray &str)
-{
-    //检验数据帧头,帧头固定为(0XA5),同时务必确认帧头与上一帧数据有时差
-    if((str.at(0)==char(0XA5)))
-    {
-        vRxBuff = str;
-    }
-    else if(vRxBuff.at(0)==char(0XA5))
-    {
-        vRxBuff.append(str);
-    }
-    //数据帧协议解析，以及判断，需要先具备10个字符，即包含完整的帧头，帧尾数据
-    if((vRxBuff.at(0)==char(0XA5))
-         &&(vRxBuff.length()>=10))
-    {
-        vHeadCheck();
-        //协议处理，如果现有数据大于数据帧长度
-        if(thisLength<=vRxBuff.length())//如果现在达到了读取数据量
-        {
-            if(this->vProtocol.get_protocol_info(
-               this->vProtocol.rx_info.utf8_data,
-               &rx_pos,
-               &this->vProtocol.rx_info.flags_register,
-               this->vProtocol.rx_info.data))
-            {
-                //删除已使用
-                vRxBuff.remove(0,thisLength);
-                //获取接收数据的时间戳
-                QString timeString;
-                timeString = QDateTime::currentDateTime().toString("[yyyy-MM-dd hh:mm:ss.zzz]\n");
-                /*获取CMDID*/
-                this->vProtocol.rx_info.cmd_id =
-                this->vProtocol.rx_pro.cmd_id;
-                /*获取数据长度*/
-                this->vProtocol.rx_info.float_len =
-                (this->vProtocol.rx_pro.header.data_length-2)/4;
-                /*获取字符长度*/
-                this->vProtocol.rx_info.utf8_data_len =
-                this->vProtocol.rx_date_length;
-                /*加入显示*/
-                vUpdateShowBuff(timeString);
-                /*加入示波器*/
-                this->vRxdata.clear();
-                for(qint8 i=0;i<this->vProtocol.rx_info.float_len;i++)
-                {
-                   this->vRxdata.append(this->vProtocol.rx_info.data[i]);
-                }
-                ShowQVariant.setValue(this->vRxdata);
-                //待接收长度清零
-                thisLength = 0;
-                //如果有数据未处理
-                if(vRxBuff.length()>=10)
-                {
-                    vSeaskyRxIRQ(vRxBuff);
-                }
-            }
-            else
-            {
-                //解析失败判断
-                thisLength = 0;
-                //删除已使用
-                vRxBuff.remove(0,thisLength);
-                //如果有数据未处理
-                if(!vRxBuff.isEmpty())
-                {
-                    //直接当新数据处理
-                    vSeaskyRxIRQ(vRxBuff);
-                }
-            }
-        }
-        return;
-    }
-}
 //换种接收处理数据方式
 void vSeaskyPort::vSeaskyRx(void)
 {
@@ -391,13 +224,13 @@ void vSeaskyPort::vSeaskyRx(void)
         {
             vRxBuff.append(vRxSerialBuff);
         }
-        //
-        if(vRxBuff.length() >= 15)
+        if((vRxBuff.at(0) != char(0XA5)) && (vRxBuff.length() >= 10))
         {
-            while ((vRxBuff.length()>10) && (vRxBuff.at(0)!=char(0XA5)))
-            {
-                vRxBuff.remove(0,1);
-            }
+            vRxBuff.remove(0,1);
+        }
+        if((vRxBuff.at(0)==char(0XA5))
+             &&(vRxBuff.length()>=10))
+        {
             if(vHeadCheck())
             {
                 if(thisLength<=vRxBuff.length())//如果现在达到了读取数据量
@@ -435,6 +268,11 @@ void vSeaskyPort::vSeaskyRx(void)
                         //待接收长度清零
                         thisLength = 0;
                     }
+                    else
+                    {
+                        //解析失败
+                        vRxBuff.clear();
+                    }
                 }
             }
         }
@@ -469,14 +307,13 @@ bool vSeaskyPort::vHeadCheck(void)
         {
             //帧头校验解析失败
             thisLength = 0;
-            vRxBuff.remove(0,1);//删除0x5A头帧
-//            vRxBuff.clear();
+            vRxBuff.clear();
             return 0;
         }
     }
     else
     {
-        return  0;
+        return  1;
     }
 }
 void vSeaskyPort::setPlainEdit(vPlainTextEdit * edit)

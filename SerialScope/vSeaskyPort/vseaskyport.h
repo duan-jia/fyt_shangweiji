@@ -97,8 +97,6 @@ public:
 
     void JudgeID(uint16_t ID);
 public slots:
-    void vSeaskyRxIRQ(void);
-    void vSeaskyRxIRQ(const QByteArray &str);
     void vSeaskyTxSlot(void);
     void vSeaskyRx(void);
 
