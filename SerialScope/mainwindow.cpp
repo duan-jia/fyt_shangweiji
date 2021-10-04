@@ -960,6 +960,7 @@ void MainWindow::vReadSettings(void)
     resize(settings.value("size",QSize(400,400)).toSize());
     move(settings.value("pos",QPoint(200,200)).toPoint());
     //串口配置
+    ui->serialCb->setCurrentIndex(settings.value("SerialCb",QVariant(0)).toInt());
     ui->baudrateCb->setCurrentIndex(settings.value("BaudRate",QVariant(0)).toInt());
     ui->stopCb->setCurrentIndex(settings.value("StopBits",QVariant(0)).toInt());
     ui->dataCb->setCurrentIndex(settings.value("DataBits",QVariant(0)).toInt());
@@ -1015,6 +1016,7 @@ void MainWindow::vWriteSettings(void)
     settings.setValue("size",size());
     settings.setValue("pos",pos());
     //串口配置
+    settings.setValue("SerialCb",ui->serialCb->currentIndex());
     settings.setValue("BaudRate",ui->baudrateCb->currentIndex());
     settings.setValue("StopBits",ui->stopCb->currentIndex());
     settings.setValue("DataBits",ui->dataCb->currentIndex());
