@@ -394,8 +394,20 @@ void vSeaskyPort::vQueryPIDTx(void)
 }
 void vSeaskyPort::vWritePID(void)
 {
-
-
+    this->PIDdata
+    this->vProtocol.PIDdata.cmd_id = 0x0003;
+    this->vProtocol.query_info.flags_register = this->vTxSeasky.vReg;
+    this->vProtocol.query_info.float_len = 0;
+    this->vProtocol.get_protocol_send_data(
+                this->vProtocol.query_info.cmd_id,
+                this->vProtocol.query_info.flags_register,
+                this->vProtocol.query_info.data,
+                this->vProtocol.query_info.float_len,
+                this->vProtocol.query_info.utf8_data,
+                &this->vProtocol.query_info.utf8_data_len);
+    vSeaskyTxBuff=QByteArray(reinterpret_cast<const char*>(this->vProtocol.query_info.utf8_data),
+                this->vProtocol.query_info.utf8_data_len);
+    emit vSerialTx(vSeaskyTxBuff);
 
 }
 void vSeaskyPort::vQueryPIDCheckout(void)
@@ -435,6 +447,7 @@ void vSeaskyPort::JudgeID(uint16_t ID)
         {
             this->PIDdata.vFloat[i] = this->vProtocol.rx_info.data[i];
         }
+        emit RxPIDshowupdate();
         break;
     default:
         break;

@@ -47,6 +47,7 @@ uint8_t vPIDUtf8[SeaskyPortNum];
 bool    rxSeaskyHexEnable = false;       //16进制格式接收使能
 
 const QString ModulePath = "/Config/ModulePath";
+const QString PIDPath = "/Config/PIDPath";
 const QString CfgPath    = "/Config";
 class GraphicsView : public QGraphicsView
 {
@@ -722,31 +723,37 @@ void MainWindow::vInitSeasky(void)
     {
         this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[0] = ui->lineEdit_P1->text();
         this->vSerialCtr.vSeaskyPortCtr.PIDdata.vFloat[0] = this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[0].toDouble();
+        this->vSavePID();
     });
     connect(ui->lineEdit_I1,&QLineEdit::editingFinished, [=]()
     {
         this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[1] = ui->lineEdit_I1->text();
         this->vSerialCtr.vSeaskyPortCtr.PIDdata.vFloat[1] = this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[1].toDouble();
+        this->vSavePID();
     });
     connect(ui->lineEdit_D1,&QLineEdit::editingFinished, [=]()
     {
         this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[2] = ui->lineEdit_D1->text();
         this->vSerialCtr.vSeaskyPortCtr.PIDdata.vFloat[2] = this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[2].toDouble();
+        this->vSavePID();
     });
     connect(ui->lineEdit_P2,&QLineEdit::editingFinished, [=]()
     {
         this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[3] = ui->lineEdit_P2->text();
         this->vSerialCtr.vSeaskyPortCtr.PIDdata.vFloat[3] = this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[3].toDouble();
+        this->vSavePID();
     });
     connect(ui->lineEdit_I2,&QLineEdit::editingFinished, [=]()
     {
         this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[4] = ui->lineEdit_I2->text();
         this->vSerialCtr.vSeaskyPortCtr.PIDdata.vFloat[4] = this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[4].toDouble();
+        this->vSavePID();
     });
     connect(ui->lineEdit_D2,&QLineEdit::editingFinished, [=]()
     {
         this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[5] = ui->lineEdit_D2->text();
         this->vSerialCtr.vSeaskyPortCtr.PIDdata.vFloat[5] = this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[5].toDouble();
+        this->vSavePID();
     });
 
     //数据更新，子控件通知父级刷新界面
@@ -766,6 +773,11 @@ void MainWindow::vInitSeasky(void)
             &this->vOpenGlWidget,
             &vOpenGlWidget::getCapeEuler,
             Qt::QueuedConnection);
+    //PID数据更新
+    connect(&this->vSerialCtr.vSeaskyPortCtr,
+            &vSeaskyPort::RxPIDshowupdate,
+            this,
+            &MainWindow::showPID);
     //模型改变
     void (QComboBox::*vChanged)(int)=&QComboBox::activated;
     connect(ui->comboBox,vChanged,
@@ -1004,6 +1016,24 @@ void MainWindow::vReadSettings(void)
         }
     }
     settings.endGroup();
+
+    QString pathpid = qApp->applicationDirPath()+PIDPath+"/"+"pid"+".ini";
+    QSettings PIDsetting(pathpid, QSettings::IniFormat);
+    PIDsetting.beginGroup("PID参数");
+    for(qint8 i = 0;i < 6; i++)
+    {
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vFloat[i] = PIDsetting.value(QString("PID：%1").arg(i + 1),"").toFloat();
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[i] = QString::number((this->vSerialCtr.vSeaskyPortCtr.PIDdata.vFloat[i]),'f',4);
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[i].remove(QRegExp("0*$"));
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[i].remove(QRegExp("[.]$"));
+    }
+    ui->lineEdit_P1->setText(vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[0]);
+    ui->lineEdit_I1->setText(vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[1]);
+    ui->lineEdit_D1->setText(vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[2]);
+    ui->lineEdit_P2->setText(vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[3]);
+    ui->lineEdit_I2->setText(vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[4]);
+    ui->lineEdit_D2->setText(vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[5]);
+    PIDsetting.endGroup();
 }
 //关闭时保存设置
 void MainWindow::vWriteSettings(void)
@@ -1486,6 +1516,19 @@ void MainWindow::vModuleAddItem(void)
         doWarning(QString::fromLocal8Bit("该名称已被使用"));
     }
 }
+void MainWindow::vSavePID()
+{
+    QString path = qApp->applicationDirPath()+PIDPath+"/"+"pid"+".ini";
+    QSettings settingPID(path, QSettings::IniFormat);
+    settingPID.beginGroup("PID参数");
+    for(qint8 i = 0; i < 6; i++)
+    {
+        settingPID.setValue(QString("PID：%1").arg(i + 1),this->vSerialCtr.vSeaskyPortCtr.PIDdata.vFloat[i]);
+    }
+    settingPID.endGroup();
+
+
+}
 //保存SEASKY协议模块数据
 void MainWindow::vSaveModule(void)
 {
@@ -1538,16 +1581,16 @@ void MainWindow::showPID(void)
 {
     for(int i = 0; i < 6; i++)
     {
-        this->vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[i] = QString::number((this->vSerialCtr.vSeaskyPortCtr.vRxSeasky.vFloat[i]),'f',6);
-        this->vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[i].remove(QRegExp("0*$"));
-        this->vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[i].remove(QRegExp("[.]$"));
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[i] = QString::number((this->vSerialCtr.vSeaskyPortCtr.PIDdata.vFloat[i]),'f',6);
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[i].remove(QRegExp("0*$"));
+        this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[i].remove(QRegExp("[.]$"));
     }
-    ui->lineEdit_P1->setText(vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[0]);
-    ui->lineEdit_I1->setText(vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[1]);
-    ui->lineEdit_D1->setText(vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[2]);
-    ui->lineEdit_P2->setText(vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[3]);
-    ui->lineEdit_I2->setText(vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[4]);
-    ui->lineEdit_D2->setText(vSerialCtr.vSeaskyPortCtr.vRxSeasky.vQString[5]);
+    ui->lineEdit_P1->setText(vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[0]);
+    ui->lineEdit_I1->setText(vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[1]);
+    ui->lineEdit_D1->setText(vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[2]);
+    ui->lineEdit_P2->setText(vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[3]);
+    ui->lineEdit_I2->setText(vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[4]);
+    ui->lineEdit_D2->setText(vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[5]);
 }
 
 void MainWindow::vTabTimerCfg(void)

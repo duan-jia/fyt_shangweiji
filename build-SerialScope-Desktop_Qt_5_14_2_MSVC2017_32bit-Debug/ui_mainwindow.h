@@ -150,20 +150,29 @@ public:
     QGridLayout *gridLayout_21;
     vPlainTextEdit *plainTextEdit;
     QWidget *tab1_3;
-    QGridLayout *gridLayout_26;
-    QSpacerItem *horizontalSpacer_2;
-    vCustomWidget *widgetScope1;
-    vCustomWidget *widgetScope2;
+    QGridLayout *gridLayout_59;
+    QGridLayout *gridLayout_55;
+    QWidget *widget_12;
+    QGridLayout *gridLayout_56;
     vQCustomPlot *widgetScope;
-    QWidget *tab1_4;
-    QLineEdit *lineEdit_P1;
-    QLineEdit *lineEdit_I1;
-    QLineEdit *lineEdit_D1;
-    QLineEdit *lineEdit_P2;
-    QLineEdit *lineEdit_I2;
-    QLineEdit *lineEdit_D2;
-    QPushButton *PIDReadBt;
+    QWidget *widget_11;
+    QGridLayout *gridLayout_58;
+    QGroupBox *groupBox_7;
+    QGridLayout *gridLayout_57;
+    QGridLayout *gridLayout_2;
     QPushButton *PIDWriteBt;
+    QLineEdit *lineEdit_D2;
+    QLineEdit *lineEdit_P2;
+    QLineEdit *lineEdit_I1;
+    QLineEdit *lineEdit_P1;
+    QLineEdit *lineEdit_D1;
+    QLineEdit *lineEdit_I2;
+    QPushButton *PIDReadBt;
+    QSpacerItem *verticalSpacer_5;
+    vCustomWidget *widgetScope1;
+    QSpacerItem *horizontalSpacer_2;
+    vCustomWidget *widgetScope2;
+    QWidget *tab1_4;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -171,7 +180,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(834, 679);
+        MainWindow->resize(909, 679);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         gridLayout = new QGridLayout(centralwidget);
@@ -421,7 +430,7 @@ public:
         scrollAreaSend->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 666, 201));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 741, 201));
         scrollAreaSend->setWidget(scrollAreaWidgetContents);
 
         gridLayout_13->addWidget(scrollAreaSend, 0, 0, 1, 1);
@@ -562,6 +571,8 @@ public:
         groupBoxV1->setObjectName(QString::fromUtf8("groupBoxV1"));
         groupBoxV1->setMinimumSize(QSize(180, 175));
         groupBoxV1->setMaximumSize(QSize(180, 175));
+        groupBoxV1->setCursor(QCursor(Qt::ArrowCursor));
+        groupBoxV1->setFocusPolicy(Qt::NoFocus);
         gridLayout_14 = new QGridLayout(groupBoxV1);
         gridLayout_14->setObjectName(QString::fromUtf8("gridLayout_14"));
         gridLayout_14->setContentsMargins(6, 6, 6, 6);
@@ -784,7 +795,7 @@ public:
         scrollAreaWidgetContents_2 = new QWidget();
         scrollAreaWidgetContents_2->setObjectName(QString::fromUtf8("scrollAreaWidgetContents_2"));
         scrollAreaWidgetContents_2->setEnabled(true);
-        scrollAreaWidgetContents_2->setGeometry(QRect(0, 0, 294, 382));
+        scrollAreaWidgetContents_2->setGeometry(QRect(0, 0, 331, 382));
         scrollAreaS1->setWidget(scrollAreaWidgetContents_2);
 
         gridLayout_18->addWidget(scrollAreaS1, 0, 0, 1, 1);
@@ -803,7 +814,7 @@ public:
         scrollAreaS2->setWidgetResizable(true);
         scrollAreaWidgetContents_3 = new QWidget();
         scrollAreaWidgetContents_3->setObjectName(QString::fromUtf8("scrollAreaWidgetContents_3"));
-        scrollAreaWidgetContents_3->setGeometry(QRect(0, 0, 293, 382));
+        scrollAreaWidgetContents_3->setGeometry(QRect(0, 0, 331, 382));
         scrollAreaS2->setWidget(scrollAreaWidgetContents_3);
 
         gridLayout_19->addWidget(scrollAreaS2, 0, 0, 1, 1);
@@ -858,57 +869,152 @@ public:
         tabWidget1->addTab(tab1_2, QString());
         tab1_3 = new QWidget();
         tab1_3->setObjectName(QString::fromUtf8("tab1_3"));
-        gridLayout_26 = new QGridLayout(tab1_3);
-        gridLayout_26->setObjectName(QString::fromUtf8("gridLayout_26"));
-        gridLayout_26->setContentsMargins(3, 3, 3, 3);
-        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        gridLayout_59 = new QGridLayout(tab1_3);
+        gridLayout_59->setObjectName(QString::fromUtf8("gridLayout_59"));
+        gridLayout_55 = new QGridLayout();
+        gridLayout_55->setSpacing(1);
+        gridLayout_55->setObjectName(QString::fromUtf8("gridLayout_55"));
+        widget_12 = new QWidget(tab1_3);
+        widget_12->setObjectName(QString::fromUtf8("widget_12"));
+        gridLayout_56 = new QGridLayout(widget_12);
+        gridLayout_56->setObjectName(QString::fromUtf8("gridLayout_56"));
+        gridLayout_56->setContentsMargins(0, 3, 0, 3);
+        widgetScope = new vQCustomPlot(widget_12);
+        widgetScope->setObjectName(QString::fromUtf8("widgetScope"));
+        widgetScope->setEnabled(true);
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(widgetScope->sizePolicy().hasHeightForWidth());
+        widgetScope->setSizePolicy(sizePolicy);
+        widgetScope->setMinimumSize(QSize(0, 0));
+        QFont font;
+        font.setKerning(false);
+        widgetScope->setFont(font);
+        widgetScope->setLayoutDirection(Qt::LeftToRight);
 
-        gridLayout_26->addItem(horizontalSpacer_2, 1, 1, 1, 1);
+        gridLayout_56->addWidget(widgetScope, 0, 0, 1, 1);
+
+
+        gridLayout_55->addWidget(widget_12, 0, 1, 1, 1);
+
+        widget_11 = new QWidget(tab1_3);
+        widget_11->setObjectName(QString::fromUtf8("widget_11"));
+        gridLayout_58 = new QGridLayout(widget_11);
+        gridLayout_58->setObjectName(QString::fromUtf8("gridLayout_58"));
+        gridLayout_58->setVerticalSpacing(6);
+        gridLayout_58->setContentsMargins(0, 0, 0, 0);
+        groupBox_7 = new QGroupBox(widget_11);
+        groupBox_7->setObjectName(QString::fromUtf8("groupBox_7"));
+        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(groupBox_7->sizePolicy().hasHeightForWidth());
+        groupBox_7->setSizePolicy(sizePolicy1);
+        groupBox_7->setMinimumSize(QSize(200, 181));
+        groupBox_7->setMaximumSize(QSize(200, 181));
+        groupBox_7->setLayoutDirection(Qt::LeftToRight);
+        gridLayout_57 = new QGridLayout(groupBox_7);
+        gridLayout_57->setObjectName(QString::fromUtf8("gridLayout_57"));
+        gridLayout_2 = new QGridLayout();
+        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+        gridLayout_2->setContentsMargins(0, 0, 0, 0);
+        PIDWriteBt = new QPushButton(groupBox_7);
+        PIDWriteBt->setObjectName(QString::fromUtf8("PIDWriteBt"));
+
+        gridLayout_2->addWidget(PIDWriteBt, 3, 1, 1, 1);
+
+        lineEdit_D2 = new QLineEdit(groupBox_7);
+        lineEdit_D2->setObjectName(QString::fromUtf8("lineEdit_D2"));
+        sizePolicy.setHeightForWidth(lineEdit_D2->sizePolicy().hasHeightForWidth());
+        lineEdit_D2->setSizePolicy(sizePolicy);
+
+        gridLayout_2->addWidget(lineEdit_D2, 2, 1, 1, 1);
+
+        lineEdit_P2 = new QLineEdit(groupBox_7);
+        lineEdit_P2->setObjectName(QString::fromUtf8("lineEdit_P2"));
+        sizePolicy.setHeightForWidth(lineEdit_P2->sizePolicy().hasHeightForWidth());
+        lineEdit_P2->setSizePolicy(sizePolicy);
+
+        gridLayout_2->addWidget(lineEdit_P2, 0, 1, 1, 1);
+
+        lineEdit_I1 = new QLineEdit(groupBox_7);
+        lineEdit_I1->setObjectName(QString::fromUtf8("lineEdit_I1"));
+        sizePolicy.setHeightForWidth(lineEdit_I1->sizePolicy().hasHeightForWidth());
+        lineEdit_I1->setSizePolicy(sizePolicy);
+
+        gridLayout_2->addWidget(lineEdit_I1, 1, 0, 1, 1);
+
+        lineEdit_P1 = new QLineEdit(groupBox_7);
+        lineEdit_P1->setObjectName(QString::fromUtf8("lineEdit_P1"));
+        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Ignored);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(lineEdit_P1->sizePolicy().hasHeightForWidth());
+        lineEdit_P1->setSizePolicy(sizePolicy2);
+
+        gridLayout_2->addWidget(lineEdit_P1, 0, 0, 1, 1);
+
+        lineEdit_D1 = new QLineEdit(groupBox_7);
+        lineEdit_D1->setObjectName(QString::fromUtf8("lineEdit_D1"));
+        sizePolicy.setHeightForWidth(lineEdit_D1->sizePolicy().hasHeightForWidth());
+        lineEdit_D1->setSizePolicy(sizePolicy);
+
+        gridLayout_2->addWidget(lineEdit_D1, 2, 0, 1, 1);
+
+        lineEdit_I2 = new QLineEdit(groupBox_7);
+        lineEdit_I2->setObjectName(QString::fromUtf8("lineEdit_I2"));
+        sizePolicy.setHeightForWidth(lineEdit_I2->sizePolicy().hasHeightForWidth());
+        lineEdit_I2->setSizePolicy(sizePolicy);
+
+        gridLayout_2->addWidget(lineEdit_I2, 1, 1, 1, 1);
+
+        PIDReadBt = new QPushButton(groupBox_7);
+        PIDReadBt->setObjectName(QString::fromUtf8("PIDReadBt"));
+
+        gridLayout_2->addWidget(PIDReadBt, 3, 0, 1, 1);
+
+        gridLayout_2->setRowStretch(0, 1);
+        gridLayout_2->setRowStretch(1, 1);
+        gridLayout_2->setRowStretch(2, 1);
+        gridLayout_2->setRowStretch(3, 2);
+
+        gridLayout_57->addLayout(gridLayout_2, 0, 0, 1, 1);
+
+
+        gridLayout_58->addWidget(groupBox_7, 0, 0, 1, 1);
+
+        verticalSpacer_5 = new QSpacerItem(48, 351, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_58->addItem(verticalSpacer_5, 1, 0, 1, 1);
+
+
+        gridLayout_55->addWidget(widget_11, 0, 0, 1, 1);
+
+        gridLayout_55->setColumnStretch(0, 1);
+        gridLayout_55->setColumnStretch(1, 8);
+
+        gridLayout_59->addLayout(gridLayout_55, 0, 0, 1, 3);
 
         widgetScope1 = new vCustomWidget(tab1_3);
         widgetScope1->setObjectName(QString::fromUtf8("widgetScope1"));
         widgetScope1->setMaximumSize(QSize(16777215, 64));
 
-        gridLayout_26->addWidget(widgetScope1, 1, 0, 1, 1);
+        gridLayout_59->addWidget(widgetScope1, 1, 0, 1, 1);
+
+        horizontalSpacer_2 = new QSpacerItem(838, 18, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout_59->addItem(horizontalSpacer_2, 1, 1, 1, 1);
 
         widgetScope2 = new vCustomWidget(tab1_3);
         widgetScope2->setObjectName(QString::fromUtf8("widgetScope2"));
         widgetScope2->setMaximumSize(QSize(16777215, 64));
 
-        gridLayout_26->addWidget(widgetScope2, 1, 2, 1, 1);
-
-        widgetScope = new vQCustomPlot(tab1_3);
-        widgetScope->setObjectName(QString::fromUtf8("widgetScope"));
-
-        gridLayout_26->addWidget(widgetScope, 0, 0, 1, 3);
+        gridLayout_59->addWidget(widgetScope2, 1, 2, 1, 1);
 
         tabWidget1->addTab(tab1_3, QString());
         tab1_4 = new QWidget();
         tab1_4->setObjectName(QString::fromUtf8("tab1_4"));
-        lineEdit_P1 = new QLineEdit(tab1_4);
-        lineEdit_P1->setObjectName(QString::fromUtf8("lineEdit_P1"));
-        lineEdit_P1->setGeometry(QRect(80, 40, 81, 41));
-        lineEdit_I1 = new QLineEdit(tab1_4);
-        lineEdit_I1->setObjectName(QString::fromUtf8("lineEdit_I1"));
-        lineEdit_I1->setGeometry(QRect(250, 40, 81, 41));
-        lineEdit_D1 = new QLineEdit(tab1_4);
-        lineEdit_D1->setObjectName(QString::fromUtf8("lineEdit_D1"));
-        lineEdit_D1->setGeometry(QRect(420, 40, 81, 41));
-        lineEdit_P2 = new QLineEdit(tab1_4);
-        lineEdit_P2->setObjectName(QString::fromUtf8("lineEdit_P2"));
-        lineEdit_P2->setGeometry(QRect(80, 160, 81, 41));
-        lineEdit_I2 = new QLineEdit(tab1_4);
-        lineEdit_I2->setObjectName(QString::fromUtf8("lineEdit_I2"));
-        lineEdit_I2->setGeometry(QRect(250, 160, 81, 41));
-        lineEdit_D2 = new QLineEdit(tab1_4);
-        lineEdit_D2->setObjectName(QString::fromUtf8("lineEdit_D2"));
-        lineEdit_D2->setGeometry(QRect(420, 160, 81, 41));
-        PIDReadBt = new QPushButton(tab1_4);
-        PIDReadBt->setObjectName(QString::fromUtf8("PIDReadBt"));
-        PIDReadBt->setGeometry(QRect(240, 300, 93, 28));
-        PIDWriteBt = new QPushButton(tab1_4);
-        PIDWriteBt->setObjectName(QString::fromUtf8("PIDWriteBt"));
-        PIDWriteBt->setGeometry(QRect(390, 300, 93, 28));
         tabWidget1->addTab(tab1_4, QString());
 
         gridLayout->addWidget(tabWidget1, 0, 0, 1, 1);
@@ -916,7 +1022,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 834, 26));
+        menubar->setGeometry(QRect(0, 0, 909, 26));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -924,8 +1030,8 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget1->setCurrentIndex(1);
-        tabWidget->setCurrentIndex(1);
+        tabWidget1->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -988,9 +1094,10 @@ public:
         groupBox_2->setTitle(QCoreApplication::translate("MainWindow", "TxData", nullptr));
         groupBox_3->setTitle(QCoreApplication::translate("MainWindow", "RxData", nullptr));
         tabWidget1->setTabText(tabWidget1->indexOf(tab1_2), QCoreApplication::translate("MainWindow", "\351\200\232\344\277\241\345\215\217\350\256\256", nullptr));
-        tabWidget1->setTabText(tabWidget1->indexOf(tab1_3), QCoreApplication::translate("MainWindow", "\344\270\262\345\217\243\347\244\272\346\263\242\345\231\250", nullptr));
-        PIDReadBt->setText(QCoreApplication::translate("MainWindow", "\345\217\202\346\225\260\350\257\273\345\217\226", nullptr));
+        groupBox_7->setTitle(QCoreApplication::translate("MainWindow", "PID\345\217\202\346\225\260\350\260\203\350\212\202", nullptr));
         PIDWriteBt->setText(QCoreApplication::translate("MainWindow", "\345\206\231\345\217\202\346\225\260", nullptr));
+        PIDReadBt->setText(QCoreApplication::translate("MainWindow", "\345\217\202\346\225\260\350\257\273\345\217\226", nullptr));
+        tabWidget1->setTabText(tabWidget1->indexOf(tab1_3), QCoreApplication::translate("MainWindow", "\344\270\262\345\217\243\347\244\272\346\263\242\345\231\250", nullptr));
         tabWidget1->setTabText(tabWidget1->indexOf(tab1_4), QCoreApplication::translate("MainWindow", "\345\217\202\346\225\260\350\260\203\350\212\202", nullptr));
     } // retranslateUi
 

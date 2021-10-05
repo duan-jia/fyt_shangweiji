@@ -108,10 +108,10 @@ public slots:
     void vShowModule(qint16 index);   //刷新协议模块
     void vModuleAddItem(void);        //添加SEASKY协议模块
     void vSaveModule(void);           //保存SEASKY协议模块数据
+    void vSavePID(void);     //保存PID参数
     /*-------------------------------------------*/
     void vImportLineText(QString str);//导入Csv数据配置
     /*-------------------------------------------*/
-//    void
     void showPID(void);//显示参数
     /*-------------------------------------------*/
     void vTabTimerCfg(void);

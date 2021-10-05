@@ -116,6 +116,7 @@ signals:
     void vSerialTx(const QByteArray & str);
     void RxScope(const QVariant &rxData);
 
+    void RxPIDshowupdate(void);
     void ReadPID(void);
     void WritePID(void);
     void vSendQuery(void);
