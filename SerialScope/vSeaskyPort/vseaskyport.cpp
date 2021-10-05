@@ -14,7 +14,7 @@ vSeaskyPort::vSeaskyPort(QWidget *parent) : QObject(parent)
 
 
     connect(this, &vSeaskyPort::ReadPID, this, &vSeaskyPort::vQueryPIDTx);
-    connect(this, &vSeaskyPort::WritePID, this, &vSeaskyPort::WritePID);
+    connect(this, &vSeaskyPort::WritePID, this, &vSeaskyPort::vWritePID);
 //    connect(this, &vSeaskyPort::vSendQuery,this, &vSeaskyPort::vQueryPIDTx);
 //    connect(&this->vQTimerQuery, &QTimer::timeout, this, &vSeaskyPort::vQueryPIDCheckout);
 }
@@ -375,12 +375,9 @@ void vSeaskyPort::vSeaskyTxSlot(void)
 }
 void vSeaskyPort::vQueryPIDTx(void)
 {
-//    this->queryFlag = true;
-
-//    this->vQTimerQuery.start(2000);//定时器不能在另一个线程中被打开？
     this->vProtocol.query_info.cmd_id = QueryID;
     this->vProtocol.query_info.flags_register = this->vTxSeasky.vReg;
-    this->vProtocol.query_info.float_len = 0;
+    this->vProtocol.query_info.float_len =  0;
     this->vProtocol.get_protocol_send_data(
                 this->vProtocol.query_info.cmd_id,
                 this->vProtocol.query_info.flags_register,
@@ -394,19 +391,18 @@ void vSeaskyPort::vQueryPIDTx(void)
 }
 void vSeaskyPort::vWritePID(void)
 {
-    this->PIDdata
-    this->vProtocol.PIDdata.cmd_id = 0x0003;
-    this->vProtocol.query_info.flags_register = this->vTxSeasky.vReg;
-    this->vProtocol.query_info.float_len = 0;
+    this->vProtocol.pidData_info.cmd_id = 0x0003;
+    this->vProtocol.pidData_info.flags_register = this->vTxSeasky.vReg;
+    this->vProtocol.pidData_info.float_len = 6;
     this->vProtocol.get_protocol_send_data(
-                this->vProtocol.query_info.cmd_id,
-                this->vProtocol.query_info.flags_register,
-                this->vProtocol.query_info.data,
-                this->vProtocol.query_info.float_len,
-                this->vProtocol.query_info.utf8_data,
-                &this->vProtocol.query_info.utf8_data_len);
-    vSeaskyTxBuff=QByteArray(reinterpret_cast<const char*>(this->vProtocol.query_info.utf8_data),
-                this->vProtocol.query_info.utf8_data_len);
+                this->vProtocol.pidData_info.cmd_id,
+                this->vProtocol.pidData_info.flags_register,
+                this->vProtocol.pidData_info.data,
+                this->vProtocol.pidData_info.float_len,
+                this->vProtocol.pidData_info.utf8_data,
+                &this->vProtocol.pidData_info.utf8_data_len);
+    vSeaskyTxBuff=QByteArray(reinterpret_cast<const char*>(this->vProtocol.pidData_info.utf8_data),
+                this->vProtocol.pidData_info.utf8_data_len);
     emit vSerialTx(vSeaskyTxBuff);
 
 }

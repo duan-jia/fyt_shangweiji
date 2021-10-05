@@ -430,7 +430,7 @@ public:
         scrollAreaSend->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 741, 201));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 98, 28));
         scrollAreaSend->setWidget(scrollAreaWidgetContents);
 
         gridLayout_13->addWidget(scrollAreaSend, 0, 0, 1, 1);

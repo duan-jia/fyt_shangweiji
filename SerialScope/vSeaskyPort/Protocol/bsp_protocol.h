@@ -38,8 +38,8 @@ public:
     protocol_info tx_info;
     protocol_info rx_info;
 
+    protocol_info pidData_info;
     protocol_info query_info;
-
     protocol rx_pro;
     uint16_t rx_date_length;
 

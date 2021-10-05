@@ -68,7 +68,6 @@ public:
     void vInitSeasky(void);     //8.串口协议初始化
     void vInitControl(void);    //9.加载控件列表->8个按钮
     void vShowTimerCfg();       //10.初始化定时器
-    void vShowPIDInit(void);    //11,参数调节的一些初始化
     /*-------------------------------------------*/
     void readSerialChange(void);//读取选中串口
     void SerialOpen(void);      //打开串口

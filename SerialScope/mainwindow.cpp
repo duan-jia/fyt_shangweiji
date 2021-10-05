@@ -93,8 +93,6 @@ MainWindow::MainWindow(QWidget *parent)
     //10.配置刷新相关的定时器
     vShowTimerCfg();
     //11,初始化参数调节
-    vShowPIDInit();
-    //
     vReadSettings();
     /*更新一次界面显示*/
     vUpdateShow();
@@ -147,8 +145,8 @@ void MainWindow::vDependenceAddr(void)
     this->vSerialCtr.vSeaskyPortCtr.vProtocol.rx_info.data =     &vRxfloat[0];
     this->vSerialCtr.vSeaskyPortCtr.vProtocol.tx_info.utf8_data = &vTxUtf8[0];
     this->vSerialCtr.vSeaskyPortCtr.vProtocol.tx_info.data =     &vTxfloat[0];
-    this->vSerialCtr.vSeaskyPortCtr.vProtocol.query_info.utf8_data = &vPIDUtf8[0];
-    this->vSerialCtr.vSeaskyPortCtr.vProtocol.query_info.data = &vPIDfloat[0];
+    this->vSerialCtr.vSeaskyPortCtr.vProtocol.pidData_info.utf8_data = &vPIDUtf8[0];
+    this->vSerialCtr.vSeaskyPortCtr.vProtocol.pidData_info.data = &vPIDfloat[0];
     /*显示数据地址*/
     ui->plainTextRx->SetShowBuffAddr(&this->vSerialCtr.vSerial.vSerialData->RxBuff);
     //串口发送，hex格式共享，所有控件建议只读
@@ -537,6 +535,7 @@ void MainWindow::vInitSerialTx(void)
 
     connect(ui->PIDReadBt, &QPushButton::released,[=]
     {
+//        this->showPID();
         emit this->vSerialCtr.vSeaskyPortCtr.ReadPID();
     });
     connect(ui->PIDWriteBt, &QPushButton::released,[=]
@@ -913,11 +912,6 @@ void MainWindow::vShowTimerCfg(void)
     this->vSerialCtr.vSeaskyPortCtr.timerStart();
     ui->widgetScope->TimerStart();
     vTabTimerCfg();
-}
-//初始化参数调节
-void MainWindow::vShowPIDInit(void)
-{
-    connect(ui->PIDReadBt, &QPushButton::released, this, &MainWindow::showPID);
 }
 //读取串口配置
 void MainWindow::readSerialChange(void)
