@@ -15,8 +15,6 @@ vSeaskyPort::vSeaskyPort(QWidget *parent) : QObject(parent)
 
     connect(this, &vSeaskyPort::ReadPID, this, &vSeaskyPort::vQueryPIDTx);
     connect(this, &vSeaskyPort::WritePID, this, &vSeaskyPort::vWritePID);
-//    connect(this, &vSeaskyPort::vSendQuery,this, &vSeaskyPort::vQueryPIDTx);
-//    connect(&this->vQTimerQuery, &QTimer::timeout, this, &vSeaskyPort::vQueryPIDCheckout);
 }
 void vSeaskyPort::vConnectRx(void)
 {
@@ -406,19 +404,6 @@ void vSeaskyPort::vWritePID(void)
     emit vSerialTx(vSeaskyTxBuff);
 
 }
-void vSeaskyPort::vQueryPIDCheckout(void)
-{
-    this->vQTimerQuery.stop();
-
-    if(this->queryFlag == false)
-    {
-        //
-    }
-    else
-    {
-        //报错
-    }
-}
 
 void vSeaskyPort::JudgeID(uint16_t ID)
 {
@@ -436,6 +421,8 @@ void vSeaskyPort::JudgeID(uint16_t ID)
 
     case 0x0002://ID为2
         //一般为上位机查询指令
+        //下位机接收信号成功
+        emit this->infromsignal();
         break;
     case 0x0003:
         //PID数据传输

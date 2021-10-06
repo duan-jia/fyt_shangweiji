@@ -130,6 +130,7 @@ protected:
     void doWarning(const QString &str);
     void doHelp(void);
     void doAbout(void);
+    void doinfrom(void);
     /*----------------串口插拔检测-----------------*/
 #ifdef WinDownVersion
     bool nativeEvent(const QByteArray & eventType, void * message, long*result);

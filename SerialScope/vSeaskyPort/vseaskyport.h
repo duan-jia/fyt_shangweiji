@@ -68,9 +68,6 @@ public:
     QTimer    vQTimerTx;
     qint32    vQtimerTxCnt=100;
 
-    QTimer vQTimerQuery;
-    bool queryFlag;
-
     void setTimer(qint32 Cnt)
     {
         timerCntSet = Cnt;
@@ -101,7 +98,6 @@ public slots:
     void vSeaskyRx(void);
 
     void vQueryPIDTx(void);//发送查询PID指令
-    void vQueryPIDCheckout(void);
     void vWritePID(void);
 private:
     qint32  vTxNum,vRxNum;
@@ -119,7 +115,7 @@ signals:
     void RxPIDshowupdate(void);
     void ReadPID(void);
     void WritePID(void);
-    void vSendQuery(void);
+    void infromsignal(void);
 };
 class vSeaskyPortQThread : public QThread
 {

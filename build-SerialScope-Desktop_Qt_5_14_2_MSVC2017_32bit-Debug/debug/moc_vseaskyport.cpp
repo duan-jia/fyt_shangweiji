@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_vSeaskyPort_t {
-    QByteArrayData data[20];
-    char stringdata0[216];
+    QByteArrayData data[19];
+    char stringdata0[200];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -46,20 +46,19 @@ QT_MOC_LITERAL(10, 101, 6), // "rxData"
 QT_MOC_LITERAL(11, 108, 15), // "RxPIDshowupdate"
 QT_MOC_LITERAL(12, 124, 7), // "ReadPID"
 QT_MOC_LITERAL(13, 132, 8), // "WritePID"
-QT_MOC_LITERAL(14, 141, 10), // "vSendQuery"
-QT_MOC_LITERAL(15, 152, 13), // "vSeaskyTxSlot"
-QT_MOC_LITERAL(16, 166, 9), // "vSeaskyRx"
-QT_MOC_LITERAL(17, 176, 11), // "vQueryPIDTx"
-QT_MOC_LITERAL(18, 188, 17), // "vQueryPIDCheckout"
-QT_MOC_LITERAL(19, 206, 9) // "vWritePID"
+QT_MOC_LITERAL(14, 141, 12), // "infromsignal"
+QT_MOC_LITERAL(15, 154, 13), // "vSeaskyTxSlot"
+QT_MOC_LITERAL(16, 168, 9), // "vSeaskyRx"
+QT_MOC_LITERAL(17, 178, 11), // "vQueryPIDTx"
+QT_MOC_LITERAL(18, 190, 9) // "vWritePID"
 
     },
     "vSeaskyPort\0vQWidgetRxShow\0\0vQWidgetTxShow\0"
     "textChanged\0vInfoChanged\0showRxHead\0"
     "vSerialTx\0str\0RxScope\0rxData\0"
     "RxPIDshowupdate\0ReadPID\0WritePID\0"
-    "vSendQuery\0vSeaskyTxSlot\0vSeaskyRx\0"
-    "vQueryPIDTx\0vQueryPIDCheckout\0vWritePID"
+    "infromsignal\0vSeaskyTxSlot\0vSeaskyRx\0"
+    "vQueryPIDTx\0vWritePID"
 };
 #undef QT_MOC_LITERAL
 
@@ -69,7 +68,7 @@ static const uint qt_meta_data_vSeaskyPort[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      16,   14, // methods
+      15,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -77,24 +76,23 @@ static const uint qt_meta_data_vSeaskyPort[] = {
       11,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   94,    2, 0x06 /* Public */,
-       3,    0,   95,    2, 0x06 /* Public */,
-       4,    0,   96,    2, 0x06 /* Public */,
-       5,    0,   97,    2, 0x06 /* Public */,
-       6,    0,   98,    2, 0x06 /* Public */,
-       7,    1,   99,    2, 0x06 /* Public */,
-       9,    1,  102,    2, 0x06 /* Public */,
-      11,    0,  105,    2, 0x06 /* Public */,
-      12,    0,  106,    2, 0x06 /* Public */,
-      13,    0,  107,    2, 0x06 /* Public */,
-      14,    0,  108,    2, 0x06 /* Public */,
+       1,    0,   89,    2, 0x06 /* Public */,
+       3,    0,   90,    2, 0x06 /* Public */,
+       4,    0,   91,    2, 0x06 /* Public */,
+       5,    0,   92,    2, 0x06 /* Public */,
+       6,    0,   93,    2, 0x06 /* Public */,
+       7,    1,   94,    2, 0x06 /* Public */,
+       9,    1,   97,    2, 0x06 /* Public */,
+      11,    0,  100,    2, 0x06 /* Public */,
+      12,    0,  101,    2, 0x06 /* Public */,
+      13,    0,  102,    2, 0x06 /* Public */,
+      14,    0,  103,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      15,    0,  109,    2, 0x0a /* Public */,
-      16,    0,  110,    2, 0x0a /* Public */,
-      17,    0,  111,    2, 0x0a /* Public */,
-      18,    0,  112,    2, 0x0a /* Public */,
-      19,    0,  113,    2, 0x0a /* Public */,
+      15,    0,  104,    2, 0x0a /* Public */,
+      16,    0,  105,    2, 0x0a /* Public */,
+      17,    0,  106,    2, 0x0a /* Public */,
+      18,    0,  107,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
@@ -110,7 +108,6 @@ static const uint qt_meta_data_vSeaskyPort[] = {
     QMetaType::Void,
 
  // slots: parameters
-    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -135,12 +132,11 @@ void vSeaskyPort::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 7: _t->RxPIDshowupdate(); break;
         case 8: _t->ReadPID(); break;
         case 9: _t->WritePID(); break;
-        case 10: _t->vSendQuery(); break;
+        case 10: _t->infromsignal(); break;
         case 11: _t->vSeaskyTxSlot(); break;
         case 12: _t->vSeaskyRx(); break;
         case 13: _t->vQueryPIDTx(); break;
-        case 14: _t->vQueryPIDCheckout(); break;
-        case 15: _t->vWritePID(); break;
+        case 14: _t->vWritePID(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -217,7 +213,7 @@ void vSeaskyPort::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         }
         {
             using _t = void (vSeaskyPort::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&vSeaskyPort::vSendQuery)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&vSeaskyPort::infromsignal)) {
                 *result = 10;
                 return;
             }
@@ -254,13 +250,13 @@ int vSeaskyPort::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 16)
+        if (_id < 15)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 16;
+        _id -= 15;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 16)
+        if (_id < 15)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 16;
+        _id -= 15;
     }
     return _id;
 }
@@ -328,7 +324,7 @@ void vSeaskyPort::WritePID()
 }
 
 // SIGNAL 10
-void vSeaskyPort::vSendQuery()
+void vSeaskyPort::infromsignal()
 {
     QMetaObject::activate(this, &staticMetaObject, 10, nullptr);
 }

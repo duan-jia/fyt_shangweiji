@@ -535,7 +535,6 @@ void MainWindow::vInitSerialTx(void)
 
     connect(ui->PIDReadBt, &QPushButton::released,[=]
     {
-//        this->showPID();
         emit this->vSerialCtr.vSeaskyPortCtr.ReadPID();
     });
     connect(ui->PIDWriteBt, &QPushButton::released,[=]
@@ -754,7 +753,7 @@ void MainWindow::vInitSeasky(void)
         this->vSerialCtr.vSeaskyPortCtr.PIDdata.vFloat[5] = this->vSerialCtr.vSeaskyPortCtr.PIDdata.vQString[5].toDouble();
         this->vSavePID();
     });
-
+    connect(&this->vSerialCtr.vSeaskyPortCtr,&vSeaskyPort::infromsignal,this,&MainWindow::doinfrom);
     //数据更新，子控件通知父级刷新界面
     connect(&this->vSerialCtr.vSeaskyPortCtr,
             &vSeaskyPort::showRxHead,
@@ -1762,4 +1761,8 @@ void MainWindow::doAbout(void)
     QMessageBox::about(this,QString::fromLocal8Bit("关于"),
                             QString::fromLocal8Bit("作者：SEASKY-刘威\n"
                                                    "参考：\n"));
+}
+void MainWindow::doinfrom(void)
+{
+    QMessageBox::information(this,QString::fromLocal8Bit("操作成功"),"                      ");
 }
