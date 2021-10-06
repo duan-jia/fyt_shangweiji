@@ -44,6 +44,12 @@ QString vPIDName[SeaskyPortNum];
 QString vPIDUnit[SeaskyPortNum];
 float   vPIDfloat[SeaskyPortNum];
 uint8_t vPIDUtf8[SeaskyPortNum];
+
+QString vQueryQString[SeaskyPortNum];
+QString vQueryName[SeaskyPortNum];
+QString vQueryUnit[SeaskyPortNum];
+float   vQueryfloat[SeaskyPortNum];
+uint8_t vQueryUtf8[SeaskyPortNum];
 bool    rxSeaskyHexEnable = false;       //16进制格式接收使能
 
 const QString ModulePath = "/Config/ModulePath";
@@ -147,6 +153,8 @@ void MainWindow::vDependenceAddr(void)
     this->vSerialCtr.vSeaskyPortCtr.vProtocol.tx_info.data =     &vTxfloat[0];
     this->vSerialCtr.vSeaskyPortCtr.vProtocol.pidData_info.utf8_data = &vPIDUtf8[0];
     this->vSerialCtr.vSeaskyPortCtr.vProtocol.pidData_info.data = &vPIDfloat[0];
+    this->vSerialCtr.vSeaskyPortCtr.vProtocol.query_info.utf8_data = &vQueryUtf8[0];
+    this->vSerialCtr.vSeaskyPortCtr.vProtocol.query_info.data = &vQueryfloat[0];
     /*显示数据地址*/
     ui->plainTextRx->SetShowBuffAddr(&this->vSerialCtr.vSerial.vSerialData->RxBuff);
     //串口发送，hex格式共享，所有控件建议只读

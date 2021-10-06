@@ -15,6 +15,8 @@
 #include <QDebug>
 /*------------------define-------------------------------*/
 #define QueryID 0x0002
+#define WriteID 0x0003
+#define Flags_Register 0x0001
 
 typedef struct
 {

@@ -12,9 +12,12 @@ vSeaskyPort::vSeaskyPort(QWidget *parent) : QObject(parent)
     connect(&this->vQTimerTx,&QTimer::timeout,
             this,&vSeaskyPort::vSeaskyTxSlot);
 
-
     connect(this, &vSeaskyPort::ReadPID, this, &vSeaskyPort::vQueryPIDTx);
     connect(this, &vSeaskyPort::WritePID, this, &vSeaskyPort::vWritePID);
+    this->vProtocol.query_info.cmd_id = QueryID;
+    this->vProtocol.query_info.flags_register = Flags_Register;
+    this->vProtocol.query_info.float_len =  0;
+    this->vProtocol.query_info.data = 0;
 }
 void vSeaskyPort::vConnectRx(void)
 {
@@ -373,10 +376,6 @@ void vSeaskyPort::vSeaskyTxSlot(void)
 }
 void vSeaskyPort::vQueryPIDTx(void)
 {
-    this->vProtocol.query_info.cmd_id = QueryID;
-    this->vProtocol.query_info.flags_register = this->vTxSeasky.vReg;
-    this->vProtocol.query_info.float_len =  0;
-    this->vProtocol.query_info.data = 0;
     this->vProtocol.get_protocol_send_data(
                 this->vProtocol.query_info.cmd_id,
                 this->vProtocol.query_info.flags_register,
@@ -390,8 +389,8 @@ void vSeaskyPort::vQueryPIDTx(void)
 }
 void vSeaskyPort::vWritePID(void)
 {
-    this->vProtocol.pidData_info.cmd_id = 0x0003;
-    this->vProtocol.pidData_info.flags_register = this->vTxSeasky.vReg;
+    this->vProtocol.pidData_info.cmd_id = WriteID;
+    this->vProtocol.pidData_info.flags_register = Flags_Register;
     this->vProtocol.pidData_info.float_len = 6;
     this->vProtocol.get_protocol_send_data(
                 this->vProtocol.pidData_info.cmd_id,
