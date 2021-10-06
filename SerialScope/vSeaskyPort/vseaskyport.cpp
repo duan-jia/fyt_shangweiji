@@ -376,6 +376,7 @@ void vSeaskyPort::vQueryPIDTx(void)
     this->vProtocol.query_info.cmd_id = QueryID;
     this->vProtocol.query_info.flags_register = this->vTxSeasky.vReg;
     this->vProtocol.query_info.float_len =  0;
+    this->vProtocol.query_info.data = 0;
     this->vProtocol.get_protocol_send_data(
                 this->vProtocol.query_info.cmd_id,
                 this->vProtocol.query_info.flags_register,
