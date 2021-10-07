@@ -630,8 +630,8 @@
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>98</width>
-                    <height>28</height>
+                    <width>741</width>
+                    <height>201</height>
                    </rect>
                   </property>
                  </widget>
@@ -1970,11 +1970,6 @@
          </widget>
         </item>
        </layout>
-      </widget>
-      <widget class="QWidget" name="tab1_4">
-       <attribute name="title">
-        <string>参数调节</string>
-       </attribute>
       </widget>
      </widget>
     </item>

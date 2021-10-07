@@ -172,7 +172,6 @@ public:
     vCustomWidget *widgetScope1;
     QSpacerItem *horizontalSpacer_2;
     vCustomWidget *widgetScope2;
-    QWidget *tab1_4;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -1013,9 +1012,6 @@ public:
         gridLayout_59->addWidget(widgetScope2, 1, 2, 1, 1);
 
         tabWidget1->addTab(tab1_3, QString());
-        tab1_4 = new QWidget();
-        tab1_4->setObjectName(QString::fromUtf8("tab1_4"));
-        tabWidget1->addTab(tab1_4, QString());
 
         gridLayout->addWidget(tabWidget1, 0, 0, 1, 1);
 
@@ -1098,7 +1094,6 @@ public:
         PIDWriteBt->setText(QCoreApplication::translate("MainWindow", "\345\206\231\345\217\202\346\225\260", nullptr));
         PIDReadBt->setText(QCoreApplication::translate("MainWindow", "\345\217\202\346\225\260\350\257\273\345\217\226", nullptr));
         tabWidget1->setTabText(tabWidget1->indexOf(tab1_3), QCoreApplication::translate("MainWindow", "\344\270\262\345\217\243\347\244\272\346\263\242\345\231\250", nullptr));
-        tabWidget1->setTabText(tabWidget1->indexOf(tab1_4), QCoreApplication::translate("MainWindow", "\345\217\202\346\225\260\350\260\203\350\212\202", nullptr));
     } // retranslateUi
 
 };

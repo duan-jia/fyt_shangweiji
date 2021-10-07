@@ -854,52 +854,52 @@ void MainWindow::vInitControl(void)
             vopenGl,
             &OpenGLScene::setCapeEuler);
 
-    QString ImagePath[8]={" "};
-    ImagePath[0] =
-            QString("background-image:url(:/image/image/v3d0.png);");
-    ImagePath[1] =
-            QString("background-image:url(:/image/image/v3d1.png);");
-    ImagePath[2] =
-            QString("background-image:url(:/image/image/v3d2.png);");
-    ImagePath[3] =
-            QString("background-image:url(:/image/image/v3d3.png);");
-    QVBoxLayout   * vQVBoxLayout =
-            new QVBoxLayout(ui->scrollAreaWidgetContents_4);
-    QPushButton   * vQPushButton1;
-    QPushButton   * vQPushButton2;
+//    QString ImagePath[8]={" "};
+//    ImagePath[0] =
+//            QString("background-image:url(:/image/image/v3d0.png);");
+//    ImagePath[1] =
+//            QString("background-image:url(:/image/image/v3d1.png);");
+//    ImagePath[2] =
+//            QString("background-image:url(:/image/image/v3d2.png);");
+//    ImagePath[3] =
+//            QString("background-image:url(:/image/image/v3d3.png);");
+//    QVBoxLayout   * vQVBoxLayout =
+//            new QVBoxLayout(ui->scrollAreaWidgetContents_4);
+//    QPushButton   * vQPushButton1;
+//    QPushButton   * vQPushButton2;
     //创建8个
-    for(qint16 i=0;i<4;i++)
-    {
-        QWidget     * vQWidget = new QWidget(ui->scrollAreaWidgetContents_4);
-        QHBoxLayout * vQHBoxLayout = new QHBoxLayout(vQWidget);
+//    for(qint16 i=0;i<4;i++)
+//    {
+//        QWidget     * vQWidget = new QWidget(ui->scrollAreaWidgetContents_4);
+//        QHBoxLayout * vQHBoxLayout = new QHBoxLayout(vQWidget);
 
-        vQPushButton1 = new QPushButton(vQWidget);
-        vQPushButton2 = new QPushButton(vQWidget);
-        vQPushButton1->setMinimumSize(68,68);
-        vQPushButton1->setMaximumSize(68,68);
-        vQPushButton2->setMinimumSize(68,68);
-        vQPushButton2->setMaximumSize(68,68);
-        vQPushButton1->setStyleSheet(ImagePath[2*i]);
-        vQPushButton2->setStyleSheet(ImagePath[2*i+1]);
-        vQHBoxLayout->addWidget(vQPushButton1);
-        vQHBoxLayout->addWidget(vQPushButton2);
+//        vQPushButton1 = new QPushButton(vQWidget);
+//        vQPushButton2 = new QPushButton(vQWidget);
+//        vQPushButton1->setMinimumSize(68,68);
+//        vQPushButton1->setMaximumSize(68,68);
+//        vQPushButton2->setMinimumSize(68,68);
+//        vQPushButton2->setMaximumSize(68,68);
+//        vQPushButton1->setStyleSheet(ImagePath[2*i]);
+//        vQPushButton2->setStyleSheet(ImagePath[2*i+1]);
+//        vQHBoxLayout->addWidget(vQPushButton1);
+//        vQHBoxLayout->addWidget(vQPushButton2);
 
-        vQWidget->setLayout(vQHBoxLayout);
-        vQVBoxLayout->addWidget(vQWidget);
+//        vQWidget->setLayout(vQHBoxLayout);
+//        vQVBoxLayout->addWidget(vQWidget);
 
-        vQHBoxLayout->setContentsMargins(0,0,0,0);
-        vQHBoxLayout->setMargin(1);
-        vQVBoxLayout->setMargin(1);
-        //绑定信号与槽，按下触发
-        connect(vQPushButton1,&QPushButton::released,[=]()
-        {
-            vControlCmd(2*i+1);
-        });
-        connect(vQPushButton1,&QPushButton::released,[=]()
-        {
-            vControlCmd(2*i+2);
-        });
-    }
+//        vQHBoxLayout->setContentsMargins(0,0,0,0);
+//        vQHBoxLayout->setMargin(1);
+//        vQVBoxLayout->setMargin(1);
+//        //绑定信号与槽，按下触发
+//        connect(vQPushButton1,&QPushButton::released,[=]()
+//        {
+//            vControlCmd(2*i+1);
+//        });
+//        connect(vQPushButton1,&QPushButton::released,[=]()
+//        {
+//            vControlCmd(2*i+2);
+//        });
+//    }
 }
 //定时器初始化
 void MainWindow::vShowTimerCfg(void)
